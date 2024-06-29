@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using MyProgressTracker.Models;
+
 namespace MyProgressTracker
 {
     public class Program
@@ -8,6 +11,7 @@ namespace MyProgressTracker
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<InMemoryDBContext>(options => options.UseInMemoryDatabase("InMemoryDb")); // Config in memory db
 
             var app = builder.Build();
 
@@ -28,7 +32,7 @@ namespace MyProgressTracker
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Landing}/{action=LandingView}/{id?}");
 
             app.Run();
         }

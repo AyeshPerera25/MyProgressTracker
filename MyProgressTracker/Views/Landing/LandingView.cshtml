@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Landing Page";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="~/css/LandingStyle.css" asp-append-version="true" />
+
+
+</head>
+<body>
+    <div class="landing-page">
+        <header>
+            <div class="container">
+                <a href="#" class="logo">MY <b class="b1">Progress </b><b class="b2"> Tracker</b></a>
+                <ul class="links">
+                    <li>Home</li>
+                    <li>About Us</li>
+                    <li>Work</li>
+                    <li>Info</li>
+                    <li id="loginButton" >Login</li>
+                </ul>
+            </div>
+            <script type="text/javascript">
+                document.getElementById('loginButton').onclick = function () {
+                    window.location.href = '@Url.Action("UserLogin", "Login")';
+                };
+            </script>
+        </header>
+        <div class="content">
+            <div class="container">
+                <div class="info">
+                    <h1 class="h1">Predict Your <a class="a1">Success!</a></h1>
+                    <p>A Progress Tracing System is an essential tool for any organization looking to optimize its project management processes and improve overall productivity. By providing detailed, real-time insights into task and project progress, it ensures that teams stay on track, meet their goals, and deliver high-quality results on time.</p>
+                    @* <a href ="@Url.Action("UserLogin", "Login")" class="btn btn-primary">Let's Start</a> *@
+                    <button id="startButton">Let's Start</button>
+                    <script type="text/javascript">
+                        document.getElementById('startButton').onclick = function () {
+                            window.location.href = '@Url.Action("UserLogin", "Login")';
+                        };
+                    </script>
+                </div>
+                <div class="image">
+                    <img src="~/contents/img2.png">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Scripts/jquery-3.5.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+</body>
+</html>
