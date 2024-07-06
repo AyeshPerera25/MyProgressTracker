@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using MyProgressTracker.Models;
+using MyProgressTracker.DataResources;
+using MyProgressTracker.Handlers;
+using MyProgressTracker.ServiceCore;
 
 namespace MyProgressTracker
 {
@@ -12,8 +14,13 @@ namespace MyProgressTracker
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<InMemoryDBContext>(options => options.UseInMemoryDatabase("InMemoryDb")); // Config in memory db
+            builder.Services.AddTransient<SignInHandler>();
+            builder.Services.AddTransient<CourseHandler>();
+            builder.Services.AddTransient<SystemServiceCore>();
 
-            var app = builder.Build();
+			Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NCaF5cXmZCeUx3Rnxbf1x0ZFBMY1hbRXZPMyBoS35RckVkWXledXdRR2BVU0Ny");
+
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -32,7 +39,7 @@ namespace MyProgressTracker
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Landing}/{action=LandingView}/{id?}");
+                pattern: "{controller=Dashboard}/{action=DashboardView}/{id?}");
 
             app.Run();
         }

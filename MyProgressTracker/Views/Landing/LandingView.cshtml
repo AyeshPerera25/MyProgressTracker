@@ -25,24 +25,13 @@
                     <li id="loginButton" >Login</li>
                 </ul>
             </div>
-            <script type="text/javascript">
-                document.getElementById('loginButton').onclick = function () {
-                    window.location.href = '@Url.Action("UserLogin", "Login")';
-                };
-            </script>
         </header>
         <div class="content">
             <div class="container">
                 <div class="info">
                     <h1 class="h1">Predict Your <a class="a1">Success!</a></h1>
                     <p>A Progress Tracing System is an essential tool for any organization looking to optimize its project management processes and improve overall productivity. By providing detailed, real-time insights into task and project progress, it ensures that teams stay on track, meet their goals, and deliver high-quality results on time.</p>
-                    @* <a href ="@Url.Action("UserLogin", "Login")" class="btn btn-primary">Let's Start</a> *@
                     <button id="startButton">Let's Start</button>
-                    <script type="text/javascript">
-                        document.getElementById('startButton').onclick = function () {
-                            window.location.href = '@Url.Action("UserLogin", "Login")';
-                        };
-                    </script>
                 </div>
                 <div class="image">
                     <img src="~/contents/img2.png">
@@ -50,7 +39,15 @@
             </div>
         </div>
     </div>
-    <script src="~/Scripts/jquery-3.5.1.min.js"></script>
-    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <footer>
+        <p>
+            Created <i class="fa fa-heart"></i> by, 
+            <a target="_blank" href="https://github.com/AyeshPerera25"> Ayesh Perera</a>
+            | IIT ID: 20232591 | UOW ID: 20848064 | 7SENG001C Enterprise Application Development – CWK 1 (2024)
+        </p>
+    </footer>
+    <script src="~/js/landingscript.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -23,27 +23,10 @@ namespace MyProgressTracker.Models
         [Display(Name = "Password")]
         public string Password { get; set; }
 
-        [DataType(DataType.Password)]
+		[Required]
+		[DataType(DataType.Password)]
         [Display(Name = "Confirm Password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match!")]
         public string ConfirmPassword { get; set; }
-
-        [Required]
-        [Display(Name = "Contact No")]
-        [DataType(DataType.PhoneNumber)]
-        public string Phone { get; set; }
-
-        [Display(Name = "Birth Day")]
-        [DataType(DataType.Date)]
-        public DateOnly BirthDay { get; set; }
-
-        [Display(Name = "Institute")]
-        public string Institute { get; set; }
-
-        [Display(Name = "Course")]
-        public string Course { get; set; }
-
-        [Display(Name = "Stage")]
-        public string Stage { get; set; }
     }
 }

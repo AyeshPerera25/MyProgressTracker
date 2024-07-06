@@ -17,13 +17,13 @@ ul {
     padding: 0;
     margin: 0;
 }
-
 .container {
     padding-left: 15px;
     padding-right: 15px;
     margin-left: auto;
     margin-right: auto;
 }
+
 /* Small */
 @media (min-width: 768px) {
     .container {
@@ -178,16 +178,30 @@ ul {
     color: #FFF;
     background-color: #FF4B2B;
 }
-/*.landing-page .content .info a {
-    border: 0;
-    border-radius: 20px;
-    padding: 12px 30px;
-    margin-top: 30px;
-    cursor: pointer;
-    color: #FFF;
-    background-color: #FF4B2B;
+footer {
+    background-color: #373C3F;
+    color: #fff;
+    font-size: 14px;
+    bottom: 0;
+    position: fixed;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 999;
 }
-*/
+
+    footer p {
+        margin: 10px 0;
+    }
+
+    footer i {
+        color: red;
+    }
+
+    footer a {
+        color: #3c97bf;
+        text-decoration: none;
+    }
 .landing-page .content .image img {
     max-width: 100%;
 }

@@ -1,0 +1,163 @@
+﻿/* Site.css */
+body {
+    font-size: .875rem;
+    background-color: #263238;
+}
+.h2-Dashboard {
+    color: #FFF;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+   
+}
+
+.logo {
+    color: #FFF;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: 20px;
+}
+
+    .logo .b2 {
+        color: #FF4B2B;
+        font-style: italic;
+        text-transform: uppercase;
+        font-size: 20px;
+    }
+
+@media (max-width: 767px) {
+    .logo {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+}
+
+
+.tabl-courses {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+}
+
+    .tabl-courses th, .tabl-courses td {
+        padding: 12px 15px;
+    }
+
+    .tabl-courses th {
+        background-color: #009879;
+        color: #ffffff;
+        text-align: center;
+    }
+
+    .tabl-courses tr {
+        border-bottom: 1px solid #dddddd;
+    }
+
+        .tabl-courses tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        .tabl-courses tr:hover {
+            background-color: #f1f1f1;
+        }
+
+    .tabl-courses td {
+        text-align: center;
+    }
+
+.row-tabl {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    color: #333;
+}
+
+    .sidebar .nav-link .fas {
+        margin-right: 4px;
+    }
+
+    .sidebar .nav-link.active {
+        color: #FF4B2B;
+     
+    }
+
+    .sidebar .nav-link:hover {
+        color: #FF4B2B;
+    }
+
+.card {
+    margin-bottom: 1.5rem;
+    
+}
+    .card .card-body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+.row-card {
+    display: flex;
+}
+
+.btn-card {
+    border: 0;
+    border-radius: 20px;
+    padding: 12px 30px;
+    margin-top: 30px;
+    cursor: pointer;
+    color: #FFF;
+    background-color: #FF4B2B;
+}
+    .btn-card:hover {
+        background-color: #373C3F;
+    }
+
+    .btn-card:active {
+        background-color: #b6ff00;
+    }
+.tbl-btn-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-tbl-add {
+    border: 0;
+    padding: 12px 30px;
+    border-radius: 5px;
+    margin-top: 30px;
+    cursor: pointer;
+    color: #FFF;
+    background-color: #007eff;
+    font-weight: bold;
+}
+    .btn-tbl-add:hover {
+        background-color: #373C3F;
+    }
+
+    .btn-tbl-add:active {
+        background-color: #b6ff00;
+    }

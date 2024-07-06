@@ -1,8 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Login Page";
-    Layout = null;
+   
 }
-@model MyProgressTracker.Models.LoginViewModel
+
+@model MyProgressTracker.Models.CompositLoginViewModel
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,52 +11,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="~/css/LoginStyle.css" asp-append-version="true" />
-
-
 </head>
 <body>
-	<h2> My Progress Tracker</h2>
+	<ejs-message id="msg_default" content="Please read the comments carefully"></ejs-message>
+	<a asp-controller="Landing" asp-action ="LandingView" class="logo"> MY <b class="b1">Progress </b><b class="b2"> Tracker</b></a>
 	<div class="container" id="container">
 		<div class="form-container sign-up-container">
-			<form action="#">
-				<h1>Create Account</h1>
-				<div class="social-container">
-					<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-					<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-					<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-				</div>
-				<span>or use your email for registration</span>
-				<input type="text" placeholder="Name" />
-				<input type="email" placeholder="Email" />
-				<input type="password" placeholder="Password" />
-				<button>Sign Up</button>
-			</form>
+            <div class="signin-container">
+				<form id="signInForm"  asp-action="SignIn" method="post" >
+					<h1>Create Account</h1>
+					<span>Let's know about you.</span>
+					<div>
+						<input id="fName" asp-for="SiginInViewModel.FirstName" type="text" placeholder="First Name" />
+					</div>
+					<div>
+						<input asp-for="SiginInViewModel.LastName" type="text" placeholder="Last Name" />
+					</div>
+					<div>
+						<input asp-for="SiginInViewModel.Email" type="email" placeholder="Email" />
+					</div>
+					<div>
+						<input id="pwd" asp-for="SiginInViewModel.Password" type="password" placeholder="Password" />
+					</div>
+					<div>
+						<input id="cPwd" asp-for="SiginInViewModel.ConfirmPassword" type="password" placeholder="Confirm Password" />
+					</div>
+					<button type="submit">Sign Up</button>
+					<span asp-validation-for="SiginInViewModel.ConfirmPassword" class="text-danger"></span>
+				</form>
+            </div>
 		</div>
+		<div id="isLogIn" data-value="@Model.IsLoggedIn"></div>
 		<div class="form-container sign-in-container">
 			<form action="#">
-				<h1>Sign in</h1>
-				<div class="social-container">
-					<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-					<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-					<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-				</div>
-				<span>or use your account</span>
+				<h1>Login</h1>
+				<span>Let's make some progress!'</span>
 				<input type="email" placeholder="Email" />
 				<input type="password" placeholder="Password" />
-				<a href="#">Forgot your password?</a>
-				<button>Sign In</button>
+				@* <a href="#">Forgot your password?</a> *@
+				<button>Login</button>
 			</form>
 		</div>
 		<div class="overlay-container">
 			<div class="overlay">
 				<div class="overlay-panel overlay-left">
 					<h1>Welcome Back!</h1>
-					<p>To keep connected with us please login with your personal info</p>
-					<button class="ghost" id="signIn">Sign In</button>
+					<p>Already have an account? Let's Login!</p>
+					<button class="ghost" id="signIn">Login</button>
 				</div>
 				<div class="overlay-panel overlay-right">
-					<h1>Hello, Friend!</h1>
-					<p>Enter your personal details and start journey with us</p>
+					<h1>Hi, First time in here?</h1>
+					<p>Create account and start the journey with us.</p>
 					<button class="ghost" id="signUp">Sign Up</button>
 				</div>
 			</div>
@@ -64,14 +70,22 @@
 
 	<footer>
 		<p>
-			Created with <i class="fa fa-heart"></i> by
-			<a target="_blank" href="https://florin-pop.com">Florin Pop</a>
-			- Read how I created this and how you can join the challenge
-			<a target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>.
+			Created <i class="fa fa-heart"></i> by,
+			<a target="_blank" href="https://github.com/AyeshPerera25"> Ayesh Perera</a>
+			| IIT ID: 20232591 | UOW ID: 20848064 | 7SENG001C Enterprise Application Development – CWK 1 (2024)
 		</p>
 	</footer>
     <script src="~/js/loginscript.js"></script>
-    <script src="~/Scripts/jquery-3.5.1.min.js"></script>
-    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
 </body>
+
+<script type="text/javascript">
+	var modelValue = document.getElementById('isLogIn').getAttribute('data-value');
+	const container1 = document.getElementById('container');
+	var signInForm = document.getElementById('signInForm');
+	console.log(modelValue)
+	if (modelValue == 0) {
+		signInForm.reset();
+		container1.classList.add("right-panel-active");
+	}
+</script>
 </html>
