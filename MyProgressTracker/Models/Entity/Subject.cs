@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using NuGet.Protocol.Plugins;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyProgressTracker.Models.Entity
 {
@@ -9,8 +10,29 @@ namespace MyProgressTracker.Models.Entity
         public int SubjectId { get; set; }
         [Required]
         public string SubjectName { get; set; }
-        public string SubjectDescription { get; set; } = string.Empty;
         [Required]
-        public string Semester { get; set; }
+        public int CourseID { get; set;}
+        public string? SubjectDescription { get; set; } 
+        [Required]
+        public int SemesterNo { get; set; }
+        [Required]
+        public DateTime SemesterStartDate { get; set; }
+        [Required]
+        public DateTime SemesterEndDate { get; set; }
+
+        // Default constructor
+        public Subject() { }
+
+        // Parameterized constructor
+        public Subject(int subjectId, string subjectName, int courseId, int semesterNo, DateTime semesterStartDate, DateTime semesterEndDate, string? subjectDescription = null)
+        {
+            SubjectId = subjectId;
+            SubjectName = subjectName;
+            CourseID = courseId;
+            SemesterNo = semesterNo;
+            SemesterStartDate = semesterStartDate;
+            SemesterEndDate = semesterEndDate;
+            SubjectDescription = subjectDescription;
+        }
     }
 }

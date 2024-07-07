@@ -49,7 +49,7 @@ namespace MyProgressTracker.Handlers
                 {
                     coursesViewModel = new CoursesViewModel();
                     populateCourseViewModel(coursesViewModel, course);
-                    populateSemesterCount(coursesViewModel);
+                    /*populateSemesterCount(coursesViewModel);*/
                     courseList.Add(coursesViewModel);
                 }
             }
@@ -83,11 +83,59 @@ namespace MyProgressTracker.Handlers
             coursesViewModel.CourseStartDate = course.CourseStartDate;
             coursesViewModel.CourseEndDate = course.CourseEndDate;
             coursesViewModel.CourseDescription = course.CourseDescription;
+            coursesViewModel.UniversityName = course.UniversityName;
+            coursesViewModel.NoOfSemesters = course.NoOfSemesters;
         }
 
         private List<Course> populateAllCourses()
         {
             return _inMemoryDB.Courses.ToList();
+        }
+
+        internal CourseResponse? addCourse(CoursesViewModel model)
+        {
+            CourseResponse courseResponse = new CourseResponse();
+            Course course = new Course();
+            validateNewCourseReqModel(model);
+            populateNewCourse(course, model);
+            persistNewCourse(course);
+            courseResponse.IsRequestSuccess = true;
+            courseResponse.Description = "Add Course Successful!";
+            courseResponse.course = course;
+            courseResponse.courseModel = model;
+            return courseResponse;
+        }
+
+        private void persistNewCourse(Course course)
+        {
+            _inMemoryDB.Courses.Add(course);
+            _inMemoryDB.SaveChanges();
+        }
+
+        private void populateNewCourse(Course course, CoursesViewModel model)
+        {
+            course.CourseName = model.CourseName;
+            course.CourseStartDate = model.CourseStartDate;
+            course.CourseEndDate = model.CourseEndDate;
+            course.CourseDescription = model.CourseDescription;
+            course.UniversityName = model.UniversityName;
+            course.NoOfSemesters = model.NoOfSemesters;
+        }
+
+        private void validateNewCourseReqModel(CoursesViewModel model)
+        {
+            if (model == null)
+            {
+                throw new Exception("New Course Request Model is Null! " );
+            }
+            if(model.CourseName == null || model.CourseName == "")
+            {
+                throw new Exception("New Course Name has not defined! ");
+            }
+            if (model.UniversityName == null || model.UniversityName == "")
+            {
+                throw new Exception("New Course Institute Name has not defined! ");
+            }
         }
     }
 }

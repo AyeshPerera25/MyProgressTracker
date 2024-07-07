@@ -161,3 +161,38 @@ body {
     .btn-tbl-add:active {
         background-color: #b6ff00;
     }
+
+.btn-tbl-edit {
+    background-color: #20b43c;
+    font-weight: bold;
+    border: 0;
+    padding: 2px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #FFF;
+    margin:4px;
+}
+    .btn-tbl-edit:hover {
+        background-color: #373C3F;
+    }
+
+    .btn-tbl-edit:active {
+        background-color: #b6ff00;
+    }
+.btn-tbl-delete {
+    background-color: #e21919;
+    font-weight: bold;
+    border: 0;
+    padding: 2px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #FFF;
+    margin: 4px;
+}
+    .btn-tbl-delete:hover {
+        background-color: #373C3F;
+    }
+
+    .btn-tbl-delete:active {
+        background-color: #b6ff00;
+    }

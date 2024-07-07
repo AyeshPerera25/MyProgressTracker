@@ -1,9 +1,9 @@
 ﻿@{
-    ViewData["Title"] = "AddCourse Page";
+    ViewData["Title"] = "Add Course Page";
 
 }
 
-@model List<CoursesViewModel>
+@model MyProgressTracker.Models.CoursesViewModel
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,33 +13,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Course</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/AddCourseStyle.css" asp-append-version="true" />
 </head>
 
 <body>
     <div class="container">
-        <form id="contact" action="" method="post">
+        <form id="contact" action="AddCourse" method="post">
             <h3>Add New Course</h3>
             <h4>Add the mentioned course data with its period.</h4>
             <fieldset>
-                <input placeholder="Your name" type="text" tabindex="1" required autofocus>
+                <input asp-for="CourseName" placeholder="Course Name" type="text" tabindex="1" required autofocus>
             </fieldset>
             <fieldset>
-                <input placeholder="Your Email Address" type="email" tabindex="2" required>
+                <input asp-for="UniversityName"  placeholder="Institute Name" type="text" tabindex="2" required autofocus>
             </fieldset>
             <fieldset>
-                <input placeholder="Your Phone Number (optional)" type="tel" tabindex="3" required>
+                <h4>Start Date</h4>
+                <input asp-for="CourseStartDate" placeholder="Start Date" type="date" tabindex="3" required>
             </fieldset>
             <fieldset>
-                <input placeholder="Your Web Site (optional)" type="url" tabindex="4" required>
+                <h4>End Date</h4>
+                <input asp-for="CourseEndDate"  placeholder="End Date" type="date" tabindex="4" required>
             </fieldset>
             <fieldset>
-                <textarea placeholder="Type your message here...." tabindex="5" required></textarea>
+                <input asp-for="NoOfSemesters" placeholder="No of Semesters" type="number" min="0" tabindex="5" required>
+            </fieldset>
+            <fieldset>
+                <textarea asp-for="CourseDescription" placeholder="Discription" tabindex="6" required></textarea>
             </fieldset>
             <fieldset>
                 <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
             </fieldset>
+            
         </form>
+        <div class="container-back-add-course">
+            <button id="btn-back-add-course">Back to Courses</button>
+        </div>
+        
     </div>
    
     <!-- Bootstrap JS and dependencies -->
@@ -49,7 +60,12 @@
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <!-- Custom JS -->
-    <script src="~/Scripts/custom.js"></script>
+    <script src="~/js/dashboardscript.js"></script>
 </body>
+@* <script>
+    document.getElementById('btn-back-add-course').onclick = function () {
+        window.location.href = 'CoursesView';
+    };
+</script> *@
 
 </html>

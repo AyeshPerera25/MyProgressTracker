@@ -29,9 +29,6 @@
                     <h1 class="h2-Dashboard">Courses</h1>
                     <a href="#" class="logo">MY <b class="b1">Progress </b><b class="b2"> Tracker</b></a>
                 </div>
-                <div class="row-add-btn">
-                   
-                </div>
                 <div class="row-tabl">
                     <div class="tbl-btn-container">
                         <button type="button" class="btn-tbl-add" id="btn-tbl-courses-add">+Add New Course</button>
@@ -42,7 +39,7 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Course</th>
-                                <th>Unversity</th>
+                                <th>Institute</th>
                                 <th> No of Semesters</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
@@ -59,11 +56,12 @@
                                         <td> @course.CourseName </td>
                                         <td> @course.UniversityName </td>
                                         <td> @course.NoOfSemesters </td>
-                                        <td> @course.CourseStartDate </td>
-                                        <td> @course.CourseEndDate </td>
+                                        <td> @course.CourseStartDate.ToShortDateString()</td>
+                                        <td> @course.CourseEndDate.ToShortDateString()</td>
                                         <td> @course.CourseDescription </td>
                                         <td>
-                                            <button type="button" class="btn-card" )">Edite</button>
+                                            <button type="button" class="btn-tbl-edit" )">Edite</button>
+                                            <button type="button" class="btn-tbl-delete" )">Delete</button>
                                         </td>
                                     </tr>
                                 }

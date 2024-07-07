@@ -15,7 +15,8 @@ namespace MyProgressTracker.Models
         public DateTime CourseStartDate { get; set; }
         [Required]
         public DateTime CourseEndDate { get; set; }
-        public int? NoOfSemesters { get; set; }
+        [Required]
+        public int NoOfSemesters { get; set; }
 
     }
 }

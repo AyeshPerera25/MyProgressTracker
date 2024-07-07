@@ -1,23 +1,21 @@
-﻿/*const mobileScreen = window.matchMedia("(max-width: 990px )");
-document.ready(function () {
-    $(".dashboard-nav-dropdown-toggle").click(function () {
-        $(this).closest(".dashboard-nav-dropdown")
-            .toggleClass("show")
-            .find(".dashboard-nav-dropdown")
-            .removeClass("show");
-        $(this).parent()
-            .siblings()
-            .removeClass("show");
-    });
-    $(".menu-toggle").click(function () {
-        if (mobileScreen.matches) {
-            $(".dashboard-nav").toggleClass("mobile-show");
-        } else {
-            $(".dashboard").toggleClass("dashboard-compact");
-        }
-    });
-});*/
+﻿
+var tblAddCourse = document.getElementById('btn-tbl-courses-add');
+var crdAddCourse = document.getElementById('btn-card-add-course')
+var btnBackAddCourse = document.getElementById('btn-back-add-course');
 
-document.getElementById('btn-tbl-courses-add').onclick = function () {
-    window.location.href = 'AddCourseView';
-};
+
+if (tblAddCourse != null) {
+    tblAddCourse.onclick = function () {
+        window.location.href = 'AddCourseView';
+    };
+}
+if (crdAddCourse != null) {
+    crdAddCourse.onclick = function () {
+        window.location.href = 'Dashboard/AddCourseView';
+    };
+}
+if (btnBackAddCourse != null) {
+    btnBackAddCourse.onclick = function () {
+        window.location.href = 'CoursesView';
+    };
+}

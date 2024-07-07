@@ -2,7 +2,7 @@
     ViewData["Title"] = "Subjects Page";
 
 }
-
+@model List<SubjectViewModel>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/DashboardStyle.css" asp-append-version="true" />
 </head>
 
@@ -26,11 +27,52 @@
                     <h1 class="h2-Dashboard">Subjects</h1>
                     <a href="#" class="logo">MY <b class="b1">Progress </b><b class="b2"> Tracker</b></a>
                 </div>
-                <div class="row">
+                <div class="row-tabl">
+                    <div class="tbl-btn-container">
+                        <button type="button" class="btn-tbl-add" id="btn-tbl-subject-add">+Add New Subject</button>
+                    </div>
+
+                    <table class="tabl-courses">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Subject</th>
+                                <th>Course</th>
+                                <th>Institute</th>
+                                <th> Semester No</th>
+                                <th>Semester Start Date</th>
+                                <th>Semester End Date</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var course in Model)
+                                {
+                                    <tr>
+                                        <td> @course.SubjectId </td>
+                                        <td> @course.SubjectName </td>
+                                        <td> @course.CourseName </td>
+                                        <td> @course.universityName</td>
+                                        <td> @course.SemesterNo </td>
+                                        <td> @course.SemesterStartDate.ToShortDateString()</td>
+                                        <td> @course.SemesterEndDate.ToShortDateString()</td>
+                                        <td> @course.Description </td>
+                                        <td>
+                                            <button type="button" class="btn-tbl-edit" )">Edite</button>
+                                            <button type="button" class="btn-tbl-delete" )">Delete</button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </main>
         </div>
     </div>
+
     <style>
         .nav-item-subjects .nav-link {
             color: #FF4B2B;
@@ -43,7 +85,15 @@
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <!-- Custom JS -->
-    <script src="~/Scripts/custom.js"></script>
+    <script src="~/js/dashboardscript.js"></script>
 </body>
+<script>
+    var tblAddSubject = document.getElementById('btn-tbl-subject-add');
+    if (tblAddSubject != null) {
+        tblAddSubject.onclick = function () {
+            window.location.href = 'AddSubjectView';
+        };
+    }
+</script>
 
 </html>

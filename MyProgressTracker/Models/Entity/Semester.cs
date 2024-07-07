@@ -16,5 +16,19 @@ namespace MyProgressTracker.Models.Entity
         public DateTime SemesterStartDate { get; set; }
         [Required]
         public DateTime SemesterEndDate { get; set; }
+
+        // Default constructor
+        public Semester() { }
+
+        // Parameterized constructor
+        public Semester(int semesterId, string semesterName, int courseId, DateTime semesterStartDate, DateTime semesterEndDate, string? semesterDescription = null)
+        {
+            SemesterId = semesterId;
+            SemesterName = semesterName;
+            CourseId = courseId;
+            SemesterStartDate = semesterStartDate;
+            SemesterEndDate = semesterEndDate;
+            SemesterDescription = semesterDescription;
+        }
     }
 }
