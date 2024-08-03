@@ -58,6 +58,9 @@ namespace MyProgressTracker.Controllers
             {
                 TempData["messageTyp"] = "S"; // Success
                 compositLoginView.IsLoggedIn = 1;
+                HttpContext.Session.SetString(SystemConstant.SessionKey, loginResponse.SessionKey);
+                HttpContext.Session.SetString(SystemConstant.UserName, loginResponse.UserName);
+                HttpContext.Session.SetString(SystemConstant.UserID, string.Concat(loginResponse.UserId));
 				return RedirectToAction("DashboardView", "Dashboard");
 			}
             else

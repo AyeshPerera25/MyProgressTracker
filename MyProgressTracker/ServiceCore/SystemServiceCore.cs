@@ -25,9 +25,9 @@ namespace MyProgressTracker.ServiceCore
             _reportHandler = reportHandler;
         }
 
-        public void populateDBwithDummy()
+        public void populateDBwithDummy(string? sessionKey, long userID)
         {
-            CourseResponse courseResponse = GetAllCourses();
+            CourseResponse courseResponse = GetAllCourses(sessionKey, userID);
             if (courseResponse != null && courseResponse.allCourses.Count == 0)
             {
                 _dummyDataInsertHandler.insertDummyData();
@@ -74,12 +74,12 @@ namespace MyProgressTracker.ServiceCore
 
         }
 
-        public CourseResponse GetAllCourses()
+        public CourseResponse GetAllCourses(string? sessionKey , long userID)
 		{
             CourseResponse courseResponse = null;
             try
             {
-                courseResponse = _courseHandler.getAllCourses();
+                courseResponse = _courseHandler.getAllCourses(sessionKey, userID);
             }
             catch (Exception ex)
             {
@@ -91,12 +91,12 @@ namespace MyProgressTracker.ServiceCore
             return courseResponse;
         }
 
-        internal CourseResponse AddNewCourse(CoursesViewModel model)
+        internal CourseResponse AddNewCourse(CoursesViewModel model, string? sessionKey, long userID)
         {
             CourseResponse courseResponse = null;
             try
             {
-                courseResponse = _courseHandler.addCourse(model);
+                courseResponse = _courseHandler.addCourse(model, sessionKey, userID);
             }
             catch (Exception ex)
             {

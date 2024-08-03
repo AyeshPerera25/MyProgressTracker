@@ -1,80 +1,91 @@
 ﻿using MyProgressTracker.DataResources;
 using MyProgressTracker.Models;
-using MyProgressTracker.Models.Entity;
+using MyProgressTracker.ServiceConnectors;
+using MyProgressTrackerAuthenticationService.Models.DataTransferObjects;
+using MyProgressTrackerInquiryService.Models.DataTransferObjects;
+using MyProgressTrackerInquiryService.Models.Entities;
 
 namespace MyProgressTracker.Handlers
 {
     public class CourseHandler
     {
-        private readonly InMemoryDBContext _inMemoryDB;
+        
+        private InquiryServiceConnector _inquiryServiceConnector;
 
-        public CourseHandler(InMemoryDBContext context)
+		public CourseHandler(InquiryServiceConnector inquiryServiceConnector)
+		{
+			_inquiryServiceConnector = inquiryServiceConnector;
+		}
+
+		public CourseResponse getAllCourses(string? sessionKey, long userID)
         {
-            _inMemoryDB = context;
+            CourseResponse response = new CourseResponse();
+            validateSessionData(sessionKey, userID);
+            GetAllCoursesReq request = populateGetAllCourseReq(sessionKey, userID);
+			GetAllCoursesRes getAllCoursesRes = _inquiryServiceConnector.GetUserAllCoursesAsync(request).GetAwaiter().GetResult();
+            validateGetAllCoursesRes(getAllCoursesRes);
+			populateCorseResponse(response, getAllCoursesRes.CourseList);
+
+			response.IsRequestSuccess = true;
+			response.Description = "Course Loading Successful!";
+            return response;
         }
 
-        public CourseResponse getAllCourses()
-        {
-            CourseResponse courseResponse = new CourseResponse();
-            
-            List < Course > courses = populateAllCourses();
-            validateAllCourses(courses);
-            populateCorseResponse(courseResponse,courses);
-            courseResponse.IsRequestSuccess = true;
-            courseResponse.Description = "Course Loading Successful!";
-            return courseResponse;
-        }
+		private void populateCorseResponse(CourseResponse courseResponse, List<Course> courses)
+		{
+			CoursesViewModel coursesViewModel;
+			List<CoursesViewModel> courseList = new List<CoursesViewModel>();
+			if (courses.Count >= 0)
+			{
+				foreach (Course course in courses)
+				{
+					coursesViewModel = new CoursesViewModel();
+					populateCourseViewModel(coursesViewModel, course);
+					/*populateSemesterCount(coursesViewModel);*/
+					courseList.Add(coursesViewModel);
+				}
+			}
+			courseResponse.allCourses = courseList;
+		}
 
-        private void validateAllCourses(List<Course> courses)
-        {
-            if (courses == null)
-            {
-                throw new Exception("Course Loading Error!");
-            }
-            if (courses.Count == 0)
-            {
-                throw new Exception("No Courses Has Found!");
-            }
+		private void validateGetAllCoursesRes(GetAllCoursesRes response)
+		{
+			if (response != null)
+			{
+				if (!response.IsRequestSuccess)
+				{
+					throw new Exception("Get All Courses Req has failed due to: " + response.Description);
+				}
+			}
+			else
+			{
+				throw new Exception("Get All Courses Req not found! ");
+			}
+		}
 
+		private GetAllCoursesReq populateGetAllCourseReq(string? sessionKey, long userID)
+		{
+			GetAllCoursesReq request = new GetAllCoursesReq();
+            request.SessionKey = sessionKey;
+            request.UserId = userID;
+            return request;
+		}
 
-        }
-
-        private void populateCorseResponse(CourseResponse courseResponse, List<Course> courses)
-        {
-            CoursesViewModel coursesViewModel;
-            List<CoursesViewModel> courseList = new List<CoursesViewModel>();
-            if(courses.Count >= 0)
+		private void validateSessionData(string? sessionKey, long userID)
+		{
+			if (sessionKey == null)
+			{
+				throw new Exception("Session Key Not Found!");
+			}
+			if (sessionKey == string.Empty)
+			{
+				throw new Exception("Session Key is Empty!");
+			}
+            if(userID <= 0L)
             {
-                foreach (Course course in courses)
-                {
-                    coursesViewModel = new CoursesViewModel();
-                    populateCourseViewModel(coursesViewModel, course);
-                    /*populateSemesterCount(coursesViewModel);*/
-                    courseList.Add(coursesViewModel);
-                }
-            }
-            courseResponse.allCourses = courseList;
-        }
-
-        private void populateSemesterCount(CoursesViewModel coursesViewModel)
-        {
-            try
-            {
-                List<Semester> semesters = _inMemoryDB.Semesters.Where<Semester>(semester => semester.CourseId == coursesViewModel.CourseId).ToList();
-                if (semesters != null)
-                {
-                    coursesViewModel.NoOfSemesters = semesters.Count;
-                }
-                else
-                {
-                    coursesViewModel.NoOfSemesters = 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Semester Loading Failed! Due to: "+ ex.Message);
-            }
-        }
+				throw new Exception("Invalid User ID! "+ string.Concat(userID));
+			}
+		}
 
         private void populateCourseViewModel(CoursesViewModel coursesViewModel, Course course)
         {
@@ -87,32 +98,54 @@ namespace MyProgressTracker.Handlers
             coursesViewModel.NoOfSemesters = course.NoOfSemesters;
         }
 
-        private List<Course> populateAllCourses()
-        {
-            return _inMemoryDB.Courses.ToList();
-        }
-
-        internal CourseResponse? addCourse(CoursesViewModel model)
+        internal CourseResponse? addCourse(CoursesViewModel model, string? sessionKey, long userID)
         {
             CourseResponse courseResponse = new CourseResponse();
             Course course = new Course();
-            validateNewCourseReqModel(model);
-            populateNewCourse(course, model);
-            persistNewCourse(course);
+            AddCourseReq request = null;
+			validateSessionData(sessionKey, userID);
+			validateNewCourseReqModel(model);
+            request = populateAddCourseReq(model, sessionKey, userID);
+            AddCourseRes addCourseRes = _inquiryServiceConnector.AddNewCoursesAsync(request).GetAwaiter().GetResult();
+            validateAddCourseRes(addCourseRes);
+	
             courseResponse.IsRequestSuccess = true;
             courseResponse.Description = "Add Course Successful!";
-            courseResponse.course = course;
+            courseResponse.course = addCourseRes.course;
             courseResponse.courseModel = model;
             return courseResponse;
         }
 
-        private void persistNewCourse(Course course)
-        {
-            _inMemoryDB.Courses.Add(course);
-            _inMemoryDB.SaveChanges();
-        }
+		private void validateAddCourseRes(AddCourseRes response)
+		{
+			if (response != null)
+			{
+				if (!response.IsRequestSuccess)
+				{
+					throw new Exception("Add Courses Req has failed due to: " + response.Description);
+				}
+			}
+			else
+			{
+				throw new Exception("Add Courses Req not found! ");
+			}
+		}
 
-        private void populateNewCourse(Course course, CoursesViewModel model)
+		private AddCourseReq? populateAddCourseReq(CoursesViewModel model, string? sessionKey, long userID)
+		{
+			AddCourseReq request = new AddCourseReq();
+            request.CourseName = model.CourseName;
+            request.CourseDescription = model.CourseDescription;
+            request.CourseStartDate = model.CourseStartDate;
+            request.CourseEndDate = model.CourseEndDate;
+            request.NoOfSemesters = model.NoOfSemesters;
+            request.UniversityName = model.UniversityName;
+            request.UserId = userID;
+            request.SessionKey = sessionKey;
+            return request;
+		}
+
+		private void populateNewCourse(Course course, CoursesViewModel model)
         {
             course.CourseName = model.CourseName;
             course.CourseStartDate = model.CourseStartDate;

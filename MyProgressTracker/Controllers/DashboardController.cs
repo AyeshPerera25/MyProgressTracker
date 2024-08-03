@@ -18,7 +18,14 @@ namespace MyProgressTracker.Controllers
         //------------------------------------------------------------------------------------------ DashboardView 
         public IActionResult DashboardView()
         {
-            _systemServiceCore.populateDBwithDummy();
+			string? sessionKey = HttpContext.Session.GetString(SystemConstant.SessionKey);
+			string? userID = HttpContext.Session.GetString(SystemConstant.UserID);
+			if (userID == null || userID == string.Empty)
+			{
+				userID = string.Concat(0L);
+			}
+
+			//_systemServiceCore.populateDBwithDummy(sessionKey, long.Parse(userID));
             List<StudySubjectProgressReportModel> studySubjectProgressReportModels = _systemServiceCore.GetProgressReport();
             DashboardViewModel model = new DashboardViewModel();
             model.ReportModelList = studySubjectProgressReportModels;
@@ -28,10 +35,19 @@ namespace MyProgressTracker.Controllers
         //------------------------------------------------------------------------------------------ CoursesView 
         public IActionResult CoursesView()
         {
-            CourseResponse response = _systemServiceCore.GetAllCourses();
+            string? sessionKey = HttpContext.Session.GetString(SystemConstant.SessionKey);
+            string? userID = HttpContext.Session.GetString(SystemConstant.UserID);
+            if(userID == null || userID == string.Empty)
+            {
+                userID = string.Concat(0L);
+            }
+
+            CourseResponse response = _systemServiceCore.GetAllCourses(sessionKey,long.Parse(userID));
             if (response != null)
             {
+                
                 TempData["message"] = response?.Description ?? "Unable to load courses";
+                
 
                 if (response.IsRequestSuccess)
                 {
@@ -41,6 +57,10 @@ namespace MyProgressTracker.Controllers
                 {
                     TempData["messageTyp"] = "E"; // Error
                 }
+            }
+            else
+            {
+
             }
             return View(response.allCourses);
         }
@@ -90,9 +110,16 @@ namespace MyProgressTracker.Controllers
         //------------------------------------------------------------------------------------------ AddSubjectView 
         public IActionResult AddSubjectView()
         {
-            AddSubjectViewModel addSubjectModel = new AddSubjectViewModel();
+			string? sessionKey = HttpContext.Session.GetString(SystemConstant.SessionKey);
+			string? userID = HttpContext.Session.GetString(SystemConstant.UserID);
+			if (userID == null || userID == string.Empty)
+			{
+				userID = string.Concat(0L);
+			}
+
+			AddSubjectViewModel addSubjectModel = new AddSubjectViewModel();
             addSubjectModel.Subject = new SubjectViewModel();
-            CourseResponse courseResponse = _systemServiceCore.GetAllCourses();
+            CourseResponse courseResponse = _systemServiceCore.GetAllCourses(sessionKey,long.Parse(userID));
             TempData["message"] = courseResponse?.Description ?? "Unable to add course!";
             if (courseResponse != null)
             {
@@ -160,7 +187,15 @@ namespace MyProgressTracker.Controllers
         //======================================================================================================================>>>  POST
         public IActionResult AddCourse(CoursesViewModel model)
         {
-            CourseResponse response = _systemServiceCore.AddNewCourse(model);
+
+			string? sessionKey = HttpContext.Session.GetString(SystemConstant.SessionKey);
+			string? userID = HttpContext.Session.GetString(SystemConstant.UserID);
+			if (userID == null || userID == string.Empty)
+			{
+				userID = string.Concat(0L);
+			}
+
+			CourseResponse response = _systemServiceCore.AddNewCourse(model, sessionKey,long.Parse(userID));
             if (response != null)
             {
                 if (response.IsRequestSuccess)

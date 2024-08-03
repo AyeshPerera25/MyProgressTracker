@@ -13,6 +13,7 @@
   <ItemGroup>
     <PackageReference Include="bootstrap" Version="5.3.3" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.7">
@@ -20,13 +21,16 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.3" />
-    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="26.1.40" />
-    <PackageReference Include="Syncfusion.EJ2.MVC5" Version="26.1.40" />
+    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="26.2.7" />
+    <PackageReference Include="Syncfusion.EJ2.MVC5" Version="26.2.7" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="MyProgressTrackerAuthenticationService">
       <HintPath>..\..\MyProgressTrackerAuthenticationService\MyProgressTrackerAuthenticationService\bin\Debug\net8.0\MyProgressTrackerAuthenticationService.dll</HintPath>
+    </Reference>
+    <Reference Include="MyProgressTrackerInquiryService">
+      <HintPath>..\..\MyProgressTrackerInquiryService\MyProgressTrackerInquiryService\bin\Debug\net8.0\MyProgressTrackerInquiryService.dll</HintPath>
     </Reference>
   </ItemGroup>
 
