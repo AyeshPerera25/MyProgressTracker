@@ -45,7 +45,31 @@ namespace MyProgressTracker.Controllers
 			return View("UserLogin", compositLoginView);
 		}
 
-		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Login(CompositLoginViewModel compositLoginView)
+        {
+            LoginResponse loginResponse = null;
+            if (compositLoginView != null)
+            {
+                loginResponse = _systemServiceCore.proccessLogin(compositLoginView.LoginViewModel);
+            }
+            TempData["message"] = loginResponse?.Description ?? "Invalid login attempt";
+
+            if (loginResponse.IsRequestSuccess)
+            {
+                TempData["messageTyp"] = "S"; // Success
+                compositLoginView.IsLoggedIn = 1;
+				return RedirectToAction("DashboardView", "Dashboard");
+			}
+            else
+            {
+                TempData["messageTyp"] = "E"; // Error
+                compositLoginView.IsLoggedIn = 0;
+            }
+            return View("UserLogin", compositLoginView);
+        }
+
+
+            [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

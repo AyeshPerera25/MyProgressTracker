@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using MyProgressTracker.DataResources;
 using MyProgressTracker.Handlers;
+using MyProgressTracker.ServiceConnectors;
 using MyProgressTracker.ServiceCore;
+using MyProgressTrackerAuthenticationService.Handlers;
 
 namespace MyProgressTracker
 {
@@ -16,8 +18,10 @@ namespace MyProgressTracker
             builder.Services.AddDbContext<InMemoryDBContext>(options => options.UseInMemoryDatabase("InMemoryDb")); // Config in memory db
             builder.Services.AddTransient<DummyDataInsertHandler>();
             builder.Services.AddTransient<SignInHandler>();
+            builder.Services.AddTransient<LoginHandler>();
             builder.Services.AddTransient<ReportHandler>();
             builder.Services.AddTransient<CourseHandler>();
+            builder.Services.AddTransient<AthenticationServiceConnector>();
             builder.Services.AddTransient<SubjectHandler>();
             builder.Services.AddTransient<StudySessionHandler>();
             builder.Services.AddTransient<SystemServiceCore>();
@@ -43,7 +47,7 @@ namespace MyProgressTracker
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Dashboard}/{action=DashboardView}/{id?}");
+                pattern: "{controller=Login}/{action=UserLogin}/{id?}");
 
             app.Run();
         }

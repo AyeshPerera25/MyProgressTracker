@@ -4,18 +4,20 @@ using MyProgressTracker.Models.Entity;
 
 namespace MyProgressTracker.ServiceCore
 {
-	public class SystemServiceCore
+	public class SystemServiceCore 
 	{
 		private readonly SignInHandler _signInHandler;
+        private readonly LoginHandler _loginHandler;
         private readonly CourseHandler _courseHandler;
         private readonly SubjectHandler _subjectHandler;
         private readonly StudySessionHandler _studySessionHandler;
         private readonly DummyDataInsertHandler _dummyDataInsertHandler;
         private readonly ReportHandler _reportHandler;
 
-        public SystemServiceCore(SignInHandler signInHandler, CourseHandler courseHandler, SubjectHandler subjectHandler, StudySessionHandler studySessionHandler, DummyDataInsertHandler dummyDataInsertHandler, ReportHandler reportHandler)
+        public SystemServiceCore(SignInHandler signInHandler, LoginHandler loginHandler, CourseHandler courseHandler, SubjectHandler subjectHandler, StudySessionHandler studySessionHandler, DummyDataInsertHandler dummyDataInsertHandler, ReportHandler reportHandler)
         {
             _signInHandler = signInHandler;
+            _loginHandler = loginHandler;
             _courseHandler = courseHandler;
             _subjectHandler = subjectHandler;
             _studySessionHandler = studySessionHandler;
@@ -43,7 +45,7 @@ namespace MyProgressTracker.ServiceCore
 			SignInResponse signInResponse = null;
 			try
             {
-				signInResponse = _signInHandler.SignIn(signInViewModel);
+				signInResponse = _signInHandler.NewUserRegistration(signInViewModel);
             }
             catch (Exception ex)
             {
@@ -55,7 +57,24 @@ namespace MyProgressTracker.ServiceCore
 
 		}
 
-		public CourseResponse GetAllCourses()
+        public LoginResponse proccessLogin(LoginViewModel loginViewModel)
+        {
+            LoginResponse loginResponse = null;
+            try
+            {
+                loginResponse = _loginHandler.UserLogin(loginViewModel);
+            }
+            catch (Exception ex)
+            {
+                loginResponse = new LoginResponse();
+                loginResponse.IsRequestSuccess = false;
+                loginResponse.Description = ex.Message;
+            }
+            return loginResponse;
+
+        }
+
+        public CourseResponse GetAllCourses()
 		{
             CourseResponse courseResponse = null;
             try

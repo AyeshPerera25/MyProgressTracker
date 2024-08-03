@@ -43,13 +43,13 @@
 		</div>
 		<div id="isLogIn" data-value="@Model.IsLoggedIn"></div>
 		<div class="form-container sign-in-container">
-			<form action="#">
+			<form id="loginForm" asp-action="Login" method="post">
 				<h1>Login</h1>
 				<span>Let's make some progress!'</span>
-				<input type="email" placeholder="Email" />
-				<input type="password" placeholder="Password" />
+				<input id="loginMail" asp-for="LoginViewModel.Email" type="email" placeholder="Email" />
+				<input id="loginPwd" asp-for="LoginViewModel.Password" type="password" placeholder="Password" />
 				@* <a href="#">Forgot your password?</a> *@
-				<button>Login</button>
+				<button type="submit">Login</button>
 			</form>
 		</div>
 		<div class="overlay-container">
