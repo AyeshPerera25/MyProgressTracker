@@ -11,6 +11,22 @@ namespace MyProgressTracker.ServiceConnectors
 		{
 			_httpClient = new HttpClient();
 		}
+		public async Task<ProgressReportRes> GetUserProgressReportAsync(ProgressReportReq request)
+		{
+			string jsonPayload = JsonConvert.SerializeObject(request);
+			Console.WriteLine(jsonPayload); // Print the JSON payload
+			var response = await _httpClient.PostAsJsonAsync("http://localhost:5011/api/DashboardInquiry/getProgressReport", request);
+			if (response.IsSuccessStatusCode)
+			{
+				return await response.Content.ReadAsAsync<ProgressReportRes>();
+			}
+			else
+			{
+				var errorContent = await response.Content.ReadAsStringAsync();
+				Console.WriteLine($"Error: {response.StatusCode}, {errorContent}");
+			}
+			return null;
+		}
 		public async Task<GetAllCoursesRes> GetUserAllCoursesAsync(GetAllCoursesReq request)
 		{
 			string jsonPayload = JsonConvert.SerializeObject(request);
@@ -36,6 +52,74 @@ namespace MyProgressTracker.ServiceConnectors
 			if (response.IsSuccessStatusCode)
 			{
 				return await response.Content.ReadAsAsync<AddCourseRes>();
+			}
+			else
+			{
+				var errorContent = await response.Content.ReadAsStringAsync();
+				Console.WriteLine($"Error: {response.StatusCode}, {errorContent}");
+			}
+			return null;
+		}
+
+		public async Task<GetAllSubjectsRes> GetUserAllSubjectAsync(GetAllSubjectsReq request)
+		{
+			string jsonPayload = JsonConvert.SerializeObject(request);
+			Console.WriteLine(jsonPayload); // Print the JSON payload
+			var response = await _httpClient.PostAsJsonAsync("http://localhost:5011/api/DashboardInquiry/getAllSubjects", request);
+			if (response.IsSuccessStatusCode)
+			{
+				return await response.Content.ReadAsAsync<GetAllSubjectsRes>();
+			}
+			else
+			{
+				var errorContent = await response.Content.ReadAsStringAsync();
+				Console.WriteLine($"Error: {response.StatusCode}, {errorContent}");
+			}
+			return null;
+		}
+
+		public async Task<AddNewSubjectRes> AddNewSubjectAsync(AddNewSubjectReq request)
+		{
+			string jsonPayload = JsonConvert.SerializeObject(request);
+			Console.WriteLine(jsonPayload); // Print the JSON payload
+			var response = await _httpClient.PostAsJsonAsync("http://localhost:5011/api/DashboardInquiry/addNewSubject", request);
+			if (response.IsSuccessStatusCode)
+			{
+				return await response.Content.ReadAsAsync<AddNewSubjectRes>();
+			}
+			else
+			{
+				var errorContent = await response.Content.ReadAsStringAsync();
+				Console.WriteLine($"Error: {response.StatusCode}, {errorContent}");
+			}
+			return null;
+		}
+
+		public async Task<GetAllStudySessionsRes> GetUserAllStudySessionsAsync(GetAllStudySessionsReq request)
+		{
+			string jsonPayload = JsonConvert.SerializeObject(request);
+			Console.WriteLine(jsonPayload); // Print the JSON payload
+			var response = await _httpClient.PostAsJsonAsync("http://localhost:5011/api/DashboardInquiry/getAllStudySessions", request);
+			if (response.IsSuccessStatusCode)
+			{
+				return await response.Content.ReadAsAsync<GetAllStudySessionsRes>();
+			}
+			else
+			{
+				var errorContent = await response.Content.ReadAsStringAsync();
+				Console.WriteLine($"Error: {response.StatusCode}, {errorContent}");
+			}
+			return null;
+		}
+
+		public async Task<AddStudySessionRes> AddNewStudySessionAsync(AddStudySessionReq request)
+		{
+			string jsonPayload = JsonConvert.SerializeObject(request);
+			Console.WriteLine(jsonPayload); // Print the JSON payload
+			var response = await _httpClient.PostAsJsonAsync("http://localhost:5011/api/DashboardInquiry/addNewStudySession", request);
+			if (response.IsSuccessStatusCode)
+			{
+				return await response.Content.ReadAsAsync<AddStudySessionRes>();
 			}
 			else
 			{

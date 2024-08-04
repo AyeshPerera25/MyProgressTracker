@@ -1,7 +1,7 @@
 ﻿using MyProgressTracker.DataResources;
 using MyProgressTracker.ServiceConnectors;
 using MyProgressTracker.Models;
-using MyProgressTracker.Models.Entity;
+using MyProgressTrackerDependanciesLib.Models.Entities;
 using MyProgressTrackerDependanciesLib.Models.DataTransferObjects;
 
 namespace MyProgressTracker.Handlers

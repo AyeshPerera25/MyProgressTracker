@@ -126,7 +126,7 @@ namespace MyProgressTracker.Handlers
 			}
 			else
 			{
-				throw new Exception("Add Courses Req not found! ");
+				throw new Exception("Add Courses Res not found! ");
 			}
 		}
 

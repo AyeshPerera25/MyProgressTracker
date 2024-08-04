@@ -1,72 +1,103 @@
-﻿using MyProgressTracker.DataResources;
-using MyProgressTracker.Models;
-using MyProgressTracker.Models.Entity;
+﻿using MyProgressTracker.Models;
+using MyProgressTracker.ServiceConnectors;
+using MyProgressTrackerDependanciesLib.Models.DataTransferObjects;
+using MyProgressTrackerDependanciesLib.Models.Entities;
 
 namespace MyProgressTracker.Handlers
 {
-    public class SubjectHandler
+    public class SubjectHandler 
     {
-        private readonly InMemoryDBContext _inMemoryDB;
+		private InquiryServiceConnector _inquiryServiceConnector;
 
-        public SubjectHandler(InMemoryDBContext context)
+		public SubjectHandler(InquiryServiceConnector inquiryServiceConnector)
+		{
+			_inquiryServiceConnector = inquiryServiceConnector;
+		}
+
+		internal SubjectResponse getAllSubjects(string? sessionKey, long userID)
         {
-            _inMemoryDB = context;
+            SubjectResponse response = new SubjectResponse();
+			validateSessionData(sessionKey, userID);
+            GetAllSubjectsReq request = populateGetAllSubjectReq(sessionKey, userID);
+            GetAllSubjectsRes getAllSubjectsRes = _inquiryServiceConnector.GetUserAllSubjectAsync(request).GetAwaiter().GetResult();
+            validateGetAllSubjectRes(getAllSubjectsRes);
+			validateAllSubjects(getAllSubjectsRes.SubjectList);
+			populateSubjectResponse(response, getAllSubjectsRes.SubjectList);
+
+			response.IsRequestSuccess = true;
+			response.Description = "Subjects Loading Successful!";
+			return response;
         }
 
-        internal SubjectResponse? getAllSubjects()
-        {
-            SubjectResponse subjectResponse = new SubjectResponse();
+		private void validateGetAllSubjectRes(GetAllSubjectsRes response)
+		{
+			if (response != null)
+			{
+				if (!response.IsRequestSuccess)
+				{
+					throw new Exception("Get All Subjects Req has failed due to: " + response.Description);
+				}
+			}
+			else
+			{
+				throw new Exception("Get All Subjects Res not found! ");
+			}
+		}
 
-            List<Subject> subjects = populateAllSubjects();
-            validateAllSubjects(subjects);
-            populateSubjectResponse(subjectResponse, subjects);
-            subjectResponse.IsRequestSuccess = true;
-            subjectResponse.Description = "Subjects Loading Successful!";
-            return subjectResponse;
-        }
+		private GetAllSubjectsReq populateGetAllSubjectReq(string? sessionKey, long userID)
+		{
+			GetAllSubjectsReq request = new GetAllSubjectsReq();
+			request.SessionKey = sessionKey;
+			request.UserId = userID;
+			return request;
+		}
 
-        private void populateSubjectResponse(SubjectResponse subjectResponse, List<Subject> subjects)
+		private void validateSessionData(string? sessionKey, long userID)
+		{
+			if (sessionKey == null)
+			{
+				throw new Exception("Session Key Not Found!");
+			}
+			if (sessionKey == string.Empty)
+			{
+				throw new Exception("Session Key is Empty!");
+			}
+			if (userID <= 0L)
+			{
+				throw new Exception("Invalid User ID! " + string.Concat(userID));
+			}
+		}
+
+		private void populateSubjectResponse(SubjectResponse subjectResponse, List<Subject> subjects)
         {
             SubjectViewModel subjectViewModel;
             List<SubjectViewModel> subjectList = new List<SubjectViewModel>();
-            Course? course;
             if (subjects.Count >= 0)
             {
                 foreach (Subject subject in subjects)
                 {
                     subjectViewModel = new SubjectViewModel();
-                    course = loadCourseForSubject(subject.CourseID);
-                    populateSubjectViewModel(subjectViewModel, subject, course);
+                    populateSubjectViewModel(subjectViewModel, subject);
                     subjectList.Add(subjectViewModel);
                 }
             }
             subjectResponse.allSubjects = subjectList;
         }
 
-        private Course loadCourseForSubject(int courseID)
-        {
-            Course? course = _inMemoryDB.Courses.SingleOrDefault<Course>(course => course.CourseId == courseID);
-            if(course == null)
-            {
-                throw new Exception("Course Loading Error For Subject!");
-            }
-            return course;
-        }
-
-        private void populateSubjectViewModel(SubjectViewModel subjectViewModel, Subject subject, Course course)
+        private void populateSubjectViewModel(SubjectViewModel subjectViewModel, Subject subject)
         {
             subjectViewModel.SubjectId = subject.SubjectId;
             subjectViewModel.SubjectName = subject.SubjectName;
-            subjectViewModel.CourseID = course.CourseId;
-            subjectViewModel.CourseName = course.CourseName;
-            subjectViewModel.universityName = course.UniversityName;
+            subjectViewModel.CourseID = subject.Course.CourseId;
+            subjectViewModel.CourseName = subject.Course.CourseName;
+            subjectViewModel.universityName = subject.Course.UniversityName;
             subjectViewModel.SemesterNo = subject.SemesterNo;
             subjectViewModel.SemesterStartDate = subject.SemesterStartDate;
             subjectViewModel.SemesterEndDate = subject.SemesterEndDate;
             subjectViewModel.Description = subject.SubjectDescription;
         }
 
-        private void validateAllSubjects(List<Subject> subjects)
+        private void validateAllSubjects(List<Subject>? subjects)
         {
             if (subjects == null)
             {
@@ -78,40 +109,51 @@ namespace MyProgressTracker.Handlers
             }
         }
 
-        private List<Subject> populateAllSubjects()
+        internal SubjectResponse? addSubject(AddSubjectViewModel model, string? sessionKey, long userID)
         {
-            return _inMemoryDB.Subjects.ToList();
-        }
-
-        internal SubjectResponse? addSubject(AddSubjectViewModel model)
-        {
-            SubjectResponse subjectResponse = new SubjectResponse();
+            SubjectResponse response = new SubjectResponse();
             Subject subject = new Subject();
-            validateNewSubjectReqModel(model);
-            populateNewSubject(subject, model);
-            persistNewSubject(subject);
-            subjectResponse.IsRequestSuccess = true;
-            subjectResponse.Description = "Add Subject Successful!";
-            subjectResponse.subject = subject;
-            subjectResponse.subjectModel = model.Subject;
-            return subjectResponse;
+			validateSessionData(sessionKey, userID);
+			validateNewSubjectReqModel(model);
+            AddNewSubjectReq request = populateAddNewSubjectReq(model, sessionKey, userID);
+            AddNewSubjectRes addNewSubjectRes = _inquiryServiceConnector.AddNewSubjectAsync(request).GetAwaiter().GetResult();
+            validateAddNewSubjectRes(addNewSubjectRes);
+
+			response.IsRequestSuccess = true;
+			response.Description = "Add Subject Successful!";
+			response.subject = addNewSubjectRes.subject;
+			response.subjectModel = model.Subject;
+            return response;
         }
 
-        private void persistNewSubject(Subject subject)
-        {
-            _inMemoryDB.Subjects.Add(subject);
-            _inMemoryDB.SaveChanges();
-        }
+		private void validateAddNewSubjectRes(AddNewSubjectRes response)
+		{
+			if (response != null)
+			{
+				if (!response.IsRequestSuccess)
+				{
+					throw new Exception("Add Subject Req has failed due to: " + response.Description);
+				}
+			}
+			else
+			{
+				throw new Exception("Add Subject Res not found! ");
+			}
+		}
 
-        private void populateNewSubject(Subject subject, AddSubjectViewModel model)
-        {
-            subject.SubjectName = model.Subject.SubjectName;
-            subject.SemesterNo = model.Subject.SemesterNo;
-            subject.SemesterStartDate = model.Subject.SemesterStartDate;
-            subject.SemesterEndDate = model.Subject.SemesterEndDate;
-            subject.SubjectDescription = model.Subject.Description;
-            subject.CourseID = model.Subject.CourseID;
-        }
+		private AddNewSubjectReq populateAddNewSubjectReq(AddSubjectViewModel model, string? sessionKey, long userID)
+		{
+			AddNewSubjectReq request = new AddNewSubjectReq();
+            request.SubjectName = model.Subject.SubjectName;
+            request.CourseID = model.Subject.CourseID;
+            request.Description = model.Subject.Description;
+            request.SemesterNo = model.Subject.SemesterNo;
+            request.SemesterStartDate = model.Subject.SemesterStartDate;
+            request.SemesterEndDate = model.Subject.SemesterEndDate;
+            request.SessionKey = sessionKey;
+            request.UserId = userID;
+            return request; 
+		}
 
         private void validateNewSubjectReqModel(AddSubjectViewModel model)
         {

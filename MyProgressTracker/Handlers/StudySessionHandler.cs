@@ -1,32 +1,76 @@
 ﻿using MyProgressTracker.DataResources;
 using MyProgressTracker.Models;
-using MyProgressTracker.Models.Entity;
+using MyProgressTracker.ServiceConnectors;
+using MyProgressTrackerDependanciesLib.Models.DataTransferObjects;
+using MyProgressTrackerDependanciesLib.Models.Entities;
 using System.Linq;
 
 namespace MyProgressTracker.Handlers
 {
     public class StudySessionHandler
     {
-        private readonly InMemoryDBContext _inMemoryDB;
+		private InquiryServiceConnector _inquiryServiceConnector;
 
-        public StudySessionHandler(InMemoryDBContext context)
-        {
-            _inMemoryDB = context;
-        }
+		public StudySessionHandler(InquiryServiceConnector inquiryServiceConnector)
+		{
+			_inquiryServiceConnector = inquiryServiceConnector;
+		}
 
-        internal StudySessionResponse? getAllSessions()
+		internal StudySessionResponse? getAllSessions(string? sessionKey, long userID)
         {
             StudySessionResponse studySessionResponse = new StudySessionResponse();
+			validateSessionData(sessionKey, userID);
+            GetAllStudySessionsReq request = populateGetAllStudySessionReq(sessionKey, userID);
+            GetAllStudySessionsRes getAllStudySessionsRes = _inquiryServiceConnector.GetUserAllStudySessionsAsync(request).GetAwaiter().GetResult();
+            validateGetAllStudySessionRes(getAllStudySessionsRes);
+			validateAllSessions(getAllStudySessionsRes.StudySessionsList); 
+            populateStudySessionResponse(studySessionResponse, getAllStudySessionsRes.StudySessionsList);
 
-            List<StudySession> sessions = populateAllSessions();
-            validateAllSessions(sessions);
-            populateStudySessionResponse(studySessionResponse, sessions);
-            studySessionResponse.IsRequestSuccess = true;
+			studySessionResponse.IsRequestSuccess = true;
             studySessionResponse.Description = "SessionLoading Successful!";
             return studySessionResponse;
         }
 
-        private void populateStudySessionResponse(StudySessionResponse studySessionResponse, List<StudySession> sessions)
+		private void validateGetAllStudySessionRes(GetAllStudySessionsRes response)
+		{
+			if (response != null)
+			{
+				if (!response.IsRequestSuccess)
+				{
+					throw new Exception("Get All Study Session Req has failed due to: " + response.Description);
+				}
+			}
+			else
+			{
+				throw new Exception("Get All Study Session Res not found! ");
+			}
+		}
+
+		private GetAllStudySessionsReq populateGetAllStudySessionReq(string? sessionKey, long userID)
+        {
+            GetAllStudySessionsReq request = new GetAllStudySessionsReq();
+            request.SessionKey = sessionKey;
+            request.UserId = userID;
+            return request;
+        }
+
+		private void validateSessionData(string? sessionKey, long userID)
+		{
+			if (sessionKey == null)
+			{
+				throw new Exception("Session Key Not Found!");
+			}
+			if (sessionKey == string.Empty)
+			{
+				throw new Exception("Session Key is Empty!");
+			}
+			if (userID <= 0L)
+			{
+				throw new Exception("Invalid User ID! " + string.Concat(userID));
+			}
+		}
+
+		private void populateStudySessionResponse(StudySessionResponse studySessionResponse, List<StudySession> sessions)
         {
             StudySessionViewModel studySessionViewModel;
             List<StudySessionViewModel> sessionList = new List<StudySessionViewModel>();
@@ -37,58 +81,25 @@ namespace MyProgressTracker.Handlers
                 foreach (StudySession session in sessions)
                 {
                     studySessionViewModel = new StudySessionViewModel();
-                    subject = loadSubjectForSession(session.SubjectId);
-                    course = loadCourseForSession(subject.CourseID);
-                    populateStudySessionViewModel(studySessionViewModel,session,course,subject);
-
+                    populateStudySessionViewModel(studySessionViewModel,session);
                     sessionList.Add(studySessionViewModel);
                 }
             }
             studySessionResponse.allSessions = sessionList;
         }
 
-        private void populateStudySessionViewModel(StudySessionViewModel studySessionViewModel, StudySession session, Course? course, Subject subject)
+        private void populateStudySessionViewModel(StudySessionViewModel studySessionViewModel, StudySession session)
         {
-            studySessionViewModel.SessionId = session.SessionId;
+            studySessionViewModel.SessionId = session.StudySessionId;
             studySessionViewModel.SessionName = session.SessionName;
             studySessionViewModel.SessionDescription = session.Description;
             studySessionViewModel.SessionStartTime = session.SessionStartTime;
             studySessionViewModel.SessionEndTime = session.SessionEndTime;
-            studySessionViewModel.SemestersNo = subject.SemesterNo;
-            studySessionViewModel.SubjectID = subject.SubjectId;
-            studySessionViewModel.SubjectName = subject.SubjectName;
-            studySessionViewModel.CourseID = course.CourseId;
-            studySessionViewModel.CourseName = course.CourseName;
-
-        }
-
-        private Course? loadCourseForSession(int courseID)
-        {
-            if (courseID == 0)
-            {
-                throw new Exception("Course Loading Error For Session!");
-            }
-            Course? course = _inMemoryDB.Courses.SingleOrDefault<Course>(_course => _course.CourseId == courseID);
-            if (course == null)
-            {
-                throw new Exception("Course Loading Error For Session!");
-            }
-            return course;
-        }
-
-        private Subject? loadSubjectForSession(int subjectId)
-        {
-
-            if (subjectId == 0)
-            {
-                throw new Exception("Subject Loading Error For Session!");
-            }
-            Subject? subject = _inMemoryDB.Subjects.SingleOrDefault<Subject>(sub => sub.SubjectId == subjectId);
-            if (subject == null)
-            {
-                throw new Exception("Subject Loading Error For Session!");
-            }
-            return subject;
+            studySessionViewModel.SemestersNo = session.Subject.SemesterNo;
+            studySessionViewModel.SubjectID = session.Subject.SubjectId;
+            studySessionViewModel.SubjectName = session.Subject.SubjectName;
+            studySessionViewModel.CourseID = session.Subject.Course.CourseId;
+            studySessionViewModel.CourseName = session.Subject.Course.CourseName;
         }
 
         private void validateAllSessions(List<StudySession> sessions)
@@ -103,56 +114,73 @@ namespace MyProgressTracker.Handlers
             }
         }
 
-        private List<StudySession> populateAllSessions()
-        {
-            return _inMemoryDB.StudySessions.ToList();
-        }
-
-        internal StudySessionResponse? addSession(AddSessionViewModel model)
+        internal StudySessionResponse addSession(AddSessionViewModel model, string? sessionKey, long userID)
         {
             StudySessionResponse response = new StudySessionResponse();
             StudySession session = new StudySession();
-            validateNewSessionReqModel(model);
-            Subject subject = loadSubjectForSession(model.Session.SubjectID);
-            populateNewSession(session, model,subject);
-            persistNewSession(session);
-            response.IsRequestSuccess = true;
-            response.Description = "Add Subject Successful!";
-            response.session = session;
+			validateSessionData(sessionKey, userID);
+			validateStudySessionViewModel(model);
+            AddStudySessionReq request = populateAddStudySessionReq(model, sessionKey, userID);
+            AddStudySessionRes addStudySessionRes = _inquiryServiceConnector.AddNewStudySessionAsync(request).GetAwaiter().GetResult();
+            validateAddStudySessionRes(addStudySessionRes);
+
+			response.IsRequestSuccess = true;
+			response.Description = "Add Subject Successful!";
+			response.session = session;
             response.sessionModel = model.Session;
-            return response;
-        }
+			return response;
+		}
 
-        private void persistNewSession(StudySession session)
-        {
-            _inMemoryDB.StudySessions.Add(session);
-            _inMemoryDB.SaveChanges();
-        }
+		private void validateAddStudySessionRes(AddStudySessionRes response)
+		{
+			if (response != null)
+			{
+				if (!response.IsRequestSuccess)
+				{
+					throw new Exception("Add Study Session Req has failed due to: " + response.Description);
+				}
+			}
+			else
+			{
+				throw new Exception("Add Study Session Res not found! ");
+			}
+		}
 
-        private void populateNewSession(StudySession session, AddSessionViewModel model, Subject subject)
-        {
-            session.SessionName = model.Session.SessionName;
-            session.SubjectId = model.Session.SubjectID;
-            session.SubjectName = subject.SubjectName ;
-            session.SessionStartTime =  model.Session.SessionStartTime;
-            session.SessionEndTime = model.Session.SessionEndTime;  
-            session.Description = model.Session.SessionDescription;
-        }
+		private AddStudySessionReq populateAddStudySessionReq(AddSessionViewModel model, string? sessionKey, long userID)
+		{
+			AddStudySessionReq request = new AddStudySessionReq();
+			request.SessionName = model.Session.SessionName;
+            request.SubjectID = model.Session.SubjectID;
+            request.SessionDescription = model.Session.SessionDescription;
+            request.SessionStartTime = model.Session.SessionStartTime;
+            request.SessionEndTime = model.Session.SessionEndTime;
+            request.SessionKey = sessionKey;
+            request.UserId = userID;
+            return request;
+		}
 
-        private void validateNewSessionReqModel(AddSessionViewModel model)
-        {
-            if (model.Session == null)
-            {
-                throw new Exception("New Session Request Model is Null! ");
-            }
-            if (model.Session.SessionName == null || model.Session.SessionName == "")
-            {
-                throw new Exception("New Session Name has not defined! ");
-            }
-            if (model.Session.SubjectID == 0)
-            {
-                throw new Exception("New Session Subject not found!");
-            }
-        }
+		private void validateStudySessionViewModel(AddSessionViewModel model)
+		{
+			if (model == null || model.Session == null)
+			{
+				throw new Exception("New Study Session Request Model is Null! ");
+			}
+			if (model.Session.SessionName == null || model.Session.SessionName == string.Empty)
+			{
+				throw new Exception("New Study Session Name has not defined! ");
+			}
+			if (model.Session.SubjectID <= 0)
+			{
+				throw new Exception("New Study Session SubjectId Invalid!");
+			}
+			if (model.Session.SessionStartTime == null)
+			{
+				throw new Exception("New Study Session Start Time has not defined! ");
+			}
+			if (model.Session.SessionEndTime == null )
+			{
+				throw new Exception("New Study Session End Time has not defined! ");
+			}
+		}
     }
 }

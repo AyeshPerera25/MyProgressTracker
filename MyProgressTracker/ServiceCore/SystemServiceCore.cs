@@ -1,6 +1,6 @@
 ﻿using MyProgressTracker.Handlers;
 using MyProgressTracker.Models;
-using MyProgressTracker.Models.Entity;
+using MyProgressTrackerDependanciesLib.Models.Entities;
 
 namespace MyProgressTracker.ServiceCore
 {
@@ -35,9 +35,19 @@ namespace MyProgressTracker.ServiceCore
 
 
         }
-        public List<StudySubjectProgressReportModel> GetProgressReport()
+        public List<StudySubjectProgressReportModel> GetProgressReport(string? sessionKey, long userID)
         {
-           return _reportHandler.getProgressReport();
+			List<StudySubjectProgressReportModel> reportModelList = null;
+			try
+			{
+				reportModelList = _reportHandler.getProgressReport(sessionKey, userID);
+			}
+			catch (Exception ex)
+			{
+				reportModelList = new List<StudySubjectProgressReportModel>();
+				
+			}
+			return reportModelList;
         }
 
 		public SignInResponse proccessSignIn(SiginInViewModel signInViewModel)
@@ -108,12 +118,12 @@ namespace MyProgressTracker.ServiceCore
             return courseResponse;
         }
 
-        internal SubjectResponse GetAllSubjects()
+        internal SubjectResponse GetAllSubjects(string? sessionKey, long userID)
         {
             SubjectResponse response = null;
             try
             {
-                response = _subjectHandler.getAllSubjects();
+                response = _subjectHandler.getAllSubjects(sessionKey,userID);
             }
             catch (Exception ex)
             {
@@ -125,12 +135,12 @@ namespace MyProgressTracker.ServiceCore
             return response;
         }
 
-        internal SubjectResponse? AddNewSubject(AddSubjectViewModel model)
+        internal SubjectResponse? AddNewSubject(AddSubjectViewModel model, string? sessionKey, long userID)
         {
             SubjectResponse? subjectResponse = null; 
             try
             {
-                subjectResponse = _subjectHandler.addSubject(model);
+                subjectResponse = _subjectHandler.addSubject(model, sessionKey, userID);
             }
             catch (Exception ex)
             {
@@ -142,12 +152,12 @@ namespace MyProgressTracker.ServiceCore
             return subjectResponse;
         }
 
-        internal StudySessionResponse GetAllStudySessions()
+        internal StudySessionResponse GetAllStudySessions(string? sessionKey, long userID)
         {
             StudySessionResponse studySessionResponse = null;
             try
             {
-                studySessionResponse = _studySessionHandler.getAllSessions();
+                studySessionResponse = _studySessionHandler.getAllSessions(sessionKey, userID);
             }
             catch (Exception ex)
             {
@@ -159,12 +169,12 @@ namespace MyProgressTracker.ServiceCore
             return studySessionResponse;
         }
 
-        internal StudySessionResponse AddNewSession(AddSessionViewModel model)
+        internal StudySessionResponse AddNewSession(AddSessionViewModel model, string? sessionKey, long userID)
         {
             StudySessionResponse? studySessionResponse = null;
             try
             {
-                studySessionResponse = _studySessionHandler.addSession(model);
+                studySessionResponse = _studySessionHandler.addSession(model, sessionKey, userID);
             }
             catch (Exception ex)
             {

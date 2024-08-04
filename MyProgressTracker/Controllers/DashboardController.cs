@@ -24,9 +24,7 @@ namespace MyProgressTracker.Controllers
 			{
 				userID = string.Concat(0L);
 			}
-
-			//_systemServiceCore.populateDBwithDummy(sessionKey, long.Parse(userID));
-            List<StudySubjectProgressReportModel> studySubjectProgressReportModels = _systemServiceCore.GetProgressReport();
+            List<StudySubjectProgressReportModel> studySubjectProgressReportModels = _systemServiceCore.GetProgressReport(sessionKey, long.Parse(userID));
             DashboardViewModel model = new DashboardViewModel();
             model.ReportModelList = studySubjectProgressReportModels;
 
@@ -67,7 +65,14 @@ namespace MyProgressTracker.Controllers
         //------------------------------------------------------------------------------------------ SubjectView 
         public IActionResult SubjectsView()
         {
-            SubjectResponse response = _systemServiceCore.GetAllSubjects();
+			string? sessionKey = HttpContext.Session.GetString(SystemConstant.SessionKey);
+			string? userID = HttpContext.Session.GetString(SystemConstant.UserID);
+			if (userID == null || userID == string.Empty)
+			{
+				userID = string.Concat(0L);
+			}
+
+			SubjectResponse response = _systemServiceCore.GetAllSubjects(sessionKey, long.Parse(userID));
             if (response != null)
             {
                 TempData["message"] = response?.Description ?? "Unable to load subjects";
@@ -86,7 +91,13 @@ namespace MyProgressTracker.Controllers
         //------------------------------------------------------------------------------------------ StudySessionsView 
         public IActionResult StudySessionsView()
         {
-            StudySessionResponse response = _systemServiceCore.GetAllStudySessions();
+			string? sessionKey = HttpContext.Session.GetString(SystemConstant.SessionKey);
+			string? userID = HttpContext.Session.GetString(SystemConstant.UserID);
+			if (userID == null || userID == string.Empty)
+			{
+				userID = string.Concat(0L);
+			}
+			StudySessionResponse response = _systemServiceCore.GetAllStudySessions(sessionKey, long.Parse(userID));
             if (response != null)
             {
                 TempData["message"] = response?.Description ?? "Unable to load sessions";
@@ -153,7 +164,13 @@ namespace MyProgressTracker.Controllers
         {
             AddSessionViewModel addSessionViewModel = new AddSessionViewModel();
             addSessionViewModel.Session = new StudySessionViewModel();
-            SubjectResponse subjectResponse = _systemServiceCore.GetAllSubjects();
+			string? sessionKey = HttpContext.Session.GetString(SystemConstant.SessionKey);
+			string? userID = HttpContext.Session.GetString(SystemConstant.UserID);
+			if (userID == null || userID == string.Empty)
+			{
+				userID = string.Concat(0L);
+			}
+			SubjectResponse subjectResponse = _systemServiceCore.GetAllSubjects(sessionKey, long.Parse(userID));
             TempData["message"] = subjectResponse?.Description ?? "Unable to add subjects!";
             if (subjectResponse != null)
             {
@@ -219,7 +236,13 @@ namespace MyProgressTracker.Controllers
 
         public IActionResult AddSubject(AddSubjectViewModel model)
         {
-            SubjectResponse response = _systemServiceCore.AddNewSubject(model);
+			string? sessionKey = HttpContext.Session.GetString(SystemConstant.SessionKey);
+			string? userID = HttpContext.Session.GetString(SystemConstant.UserID);
+			if (userID == null || userID == string.Empty)
+			{
+				userID = string.Concat(0L);
+			}
+			SubjectResponse response = _systemServiceCore.AddNewSubject(model, sessionKey, long.Parse(userID));
             if (response != null)
             {
                 if (response.IsRequestSuccess)
@@ -243,7 +266,13 @@ namespace MyProgressTracker.Controllers
 
         public IActionResult AddSession(AddSessionViewModel model)
         {
-            StudySessionResponse response = _systemServiceCore.AddNewSession(model);
+			string? sessionKey = HttpContext.Session.GetString(SystemConstant.SessionKey);
+			string? userID = HttpContext.Session.GetString(SystemConstant.UserID);
+			if (userID == null || userID == string.Empty)
+			{
+				userID = string.Concat(0L);
+			}
+			StudySessionResponse response = _systemServiceCore.AddNewSession(model, sessionKey, long.Parse(userID));
             if (response != null)
             {
                 if (response.IsRequestSuccess)

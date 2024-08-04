@@ -1,4 +1,4 @@
-﻿using MyProgressTracker.Models.Entity;
+﻿using MyProgressTrackerDependanciesLib.Models.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace MyProgressTracker.Models

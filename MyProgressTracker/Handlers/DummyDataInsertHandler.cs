@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyProgressTracker.DataResources;
-using MyProgressTracker.Models.Entity;
+using MyProgressTrackerDependanciesLib.Models.Entities;
 
 namespace MyProgressTracker.Handlers
 {
@@ -16,7 +16,7 @@ namespace MyProgressTracker.Handlers
         public void insertDummyData()
         {
             // Course 1: Computer Science
-            Course csCourse = new Course(
+           /* Course csCourse = new Course(
                 courseId: 1,
                 courseName: "Computer Science",
                 universityName: "ABC University",
@@ -185,7 +185,7 @@ namespace MyProgressTracker.Handlers
             );
             _inMemoryDB.Subjects.Add(meSubject4 );
 
-            _inMemoryDB.SaveChanges();
+            _inMemoryDB.SaveChanges();*/
 
         }
 
@@ -203,7 +203,7 @@ namespace MyProgressTracker.Handlers
         {
             List<StudySession> studySessions = new List<StudySession>();
 
-            for (int i = 0; i < sessionCount; i++)
+            /*for (int i = 0; i < sessionCount; i++)
             {
                 DateTime sessionStartTime = GetRandomDateTime(subject.SemesterStartDate, subject.SemesterEndDate);
                 DateTime sessionEndTime = sessionStartTime.AddHours(2); // Assuming each session is 2 hours long
@@ -226,7 +226,7 @@ namespace MyProgressTracker.Handlers
                 };
 
                 studySessions.Add(session);
-            }
+            }*/
 
             return studySessions;
         }
