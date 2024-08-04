@@ -1,5 +1,4 @@
-﻿using MyProgressTrackerAuthenticationService.Models.DataTransferObjects;
-using MyProgressTrackerInquiryService.Models.DataTransferObjects;
+﻿using MyProgressTrackerDependanciesLib.Models.DataTransferObjects;
 using Newtonsoft.Json;
 
 namespace MyProgressTracker.ServiceConnectors

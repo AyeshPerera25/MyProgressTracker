@@ -1,4 +1,4 @@
-﻿using MyProgressTrackerInquiryService.Models.Entities;
+﻿using MyProgressTrackerDependanciesLib.Models.Entities;
 
 namespace MyProgressTracker.Models
 {

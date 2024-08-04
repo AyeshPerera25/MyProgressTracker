@@ -3,7 +3,6 @@ using MyProgressTracker.DataResources;
 using MyProgressTracker.Handlers;
 using MyProgressTracker.ServiceConnectors;
 using MyProgressTracker.ServiceCore;
-using MyProgressTrackerAuthenticationService.Handlers;
 
 namespace MyProgressTracker
 {

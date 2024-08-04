@@ -2,7 +2,7 @@
 using MyProgressTracker.ServiceConnectors;
 using MyProgressTracker.Models;
 using MyProgressTracker.Models.Entity;
-using MyProgressTrackerAuthenticationService.Models.DataTransferObjects;
+using MyProgressTrackerDependanciesLib.Models.DataTransferObjects;
 
 namespace MyProgressTracker.Handlers
 {
