@@ -1,0 +1,3 @@
+[submodule "MyProgressTracker/MyProgressTrackerDependanciesLib"]
+	path = MyProgressTracker/MyProgressTrackerDependanciesLib
+	url = https://github.com/AyeshPerera25/MyProgressTrackerDependanciesLib.git
