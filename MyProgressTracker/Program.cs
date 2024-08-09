@@ -56,7 +56,7 @@ namespace MyProgressTracker
 
 			app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Login}/{action=UserLogin}/{id?}");
+                pattern: "{controller=Landing}/{action=LandingView}/{id?}");
 
             app.Run();
         }
