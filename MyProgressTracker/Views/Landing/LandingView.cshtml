@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Landing Page";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="~/css/LandingStyle.css" asp-append-version="true" />
+
+
+</head>
+<body>
+    <div class="landing-page">
+        <header>
+            <div class="container">
+                <a href="#" class="logo">MY <b class="b1">Progress </b><b class="b2"> Tracker</b></a>
+                <ul class="links">
+                    <li>Home</li>
+                    <li>About Us</li>
+                    <li>Work</li>
+                    <li>Info</li>
+                    <li id="loginButton" >Login</li>
+                </ul>
+            </div>
+        </header>
+        <div class="content">
+            <div class="container">
+                <div class="info">
+                    <h1 class="h1">Predict Your <a class="a1">Success!</a></h1>
+                    <p>A Progress Tracing System is an essential tool for any organization looking to optimize its project management processes and improve overall productivity. By providing detailed, real-time insights into task and project progress, it ensures that teams stay on track, meet their goals, and deliver high-quality results on time.</p>
+                    <button id="startButton">Let's Start</button>
+                </div>
+                <div class="image">
+                    <img src="~/contents/img2.png">
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>
+            Created <i class="fa fa-heart"></i> by, 
+            <a target="_blank" href="https://github.com/AyeshPerera25"> Ayesh Perera</a>
+            | IIT ID: 20232591 | UOW ID: 20848064 | 7SENG001C Enterprise Application Development – CWK 1 (2024)
+        </p>
+    </footer>
+    <script src="~/js/landingscript.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

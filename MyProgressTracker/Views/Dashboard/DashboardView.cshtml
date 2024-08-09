@@ -1,0 +1,140 @@
+﻿@{
+    ViewData["Title"] = "Dashboard Page";
+    
+}
+@model MyProgressTracker.Models.DashboardViewModel
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/DashboardStyle.css" asp-append-version="true" />
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <partial name="_DashboardMenu"/>
+
+            <!-- Main Content -->
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2-Dashboard">Dashboard</h1>
+                    <a href="#" class="logo">MY <b class="b1">Progress </b><b class="b2"> Tracker</b></a>
+                </div>
+                <div class="row-card">
+                    <div class="col-md-4">
+                        <div class="card mb-4 shadow-sm">
+                            <div class="card-header">
+                                <h4 class="my-0 font-weight-normal">Course</h4>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">First you need to add course from here! Skip this if you have alredy added the course which you attend.</p>
+                                <button type="button" id="btn-card-add-course" class="btn-card">+Add Course</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-4 shadow-sm">
+                            <div class="card-header">
+                                <h4 class="my-0 font-weight-normal">Subject</h4>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">Second you need to add a subjcets to the course from here! Skip this if you have already added the subject you have studied.</p>
+                                <button type="button" id="btn-card-add-subject" class="btn-card">+Add Subject</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card ">
+                            <div class="card-header">
+                                <h4 class="my-0 font-weight-normal">Study Session</h4>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">Finally log your studying progress on here! Let's make some progres.</p>
+                                <button type="button" id="btn-card-add-session" class="btn-card ">+Log Study Session</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-report-tabl">
+                    
+                        <div class="card ">
+                            <div class="card-header">
+                                <h4 class="my-0 font-weight-normal">Study Session Progress Report</h4>
+                            </div>
+                            <div class="card-body">
+                                <table class="tabl-courses">
+                                    <thead>
+                                        <tr>
+                                            <th>Subject</th>
+                                            <th>Course</th>
+                                            <th> No of Sessions</th>
+                                            <th>Total Study Duration</th>
+                                            <th>Total Semester Duration</th>
+                                            <th>Score (%)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            foreach (var reportData in Model.ReportModelList)
+                                            {
+                                                <tr>
+                                                    <td> @reportData.SubjectName </td>
+                                                    <td> @reportData.CourseName </td>
+                                                    <td> @reportData.NoOfSessions </td>
+                                                    <td> @reportData.TotalStudyDuration.TotalHours hours </td>
+                                                    <td> @reportData.TotalCourseDuration.TotalHours hours</td>
+                                                    <td> @reportData.Score % </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    
+                </div>
+
+            </main>
+        </div>
+    </div>
+    <style>
+        .nav-item-dashboard .nav-link {
+            color: #FF4B2B;
+        }
+    </style>
+
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <!-- Custom JS -->
+    <script src="~/js/dashboardscript.js"></script>
+</body>
+<script>
+    var crdAddSubject = document.getElementById('btn-card-add-subject')
+    var crdAddSession = document.getElementById('btn-card-add-session')
+    if (crdAddSubject != null) {
+        crdAddSubject.onclick = function () {
+            window.location.href = 'Dashboard/AddSubjectView';
+        };
+    }
+    if (crdAddSession != null) {
+        crdAddSession.onclick = function () {
+            window.location.href = 'Dashboard/AddSessionView';
+        };
+    }
+
+</script>
+
+</html>

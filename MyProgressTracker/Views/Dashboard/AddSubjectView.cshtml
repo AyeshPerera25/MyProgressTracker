@@ -1,0 +1,87 @@
+﻿@{
+    ViewData["Title"] = "Add Subject Page";
+
+}
+
+@model MyProgressTracker.Models.AddSubjectViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Subject</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/AddCourseStyle.css" asp-append-version="true" />
+</head>
+
+<body>
+    <div class="container">
+        <form id="contact" action="AddSubject" method="post">
+            <h3>Add New Subject</h3>
+            <h4>Add the mentioned subject data with its semester period.</h4>
+            <fieldset>
+                <input asp-for="Subject.SubjectName" placeholder="Subject Name" type="text" tabindex="1" required autofocus>
+            </fieldset>
+            <fieldset>
+                <select id="courseSelect" asp-for="Subject.CourseID" tabindex="2" required autofocus>
+                    <option value="" disabled selected>Select Course Name</option>
+                    @{
+                        foreach( var course in Model.Courses)
+                        {
+                            <option value="@course.CourseId" sem-max="@course.NoOfSemesters"> @course.CourseName </option>
+                        }
+                    }
+                </select>
+            </fieldset>
+            <fieldset>
+                <h4>Semester Number</h4>
+                <input id="semesterNumber" asp-for="Subject.SemesterNo" placeholder="Semester Number" type="number" min="0" max="4" tabindex="3" required>
+            </fieldset>
+            <fieldset>
+                <h4>Semester Start Date</h4>
+                <input asp-for="Subject.SemesterStartDate" placeholder="Start Date" type="date" tabindex="4" required>
+            </fieldset>
+            <fieldset>
+                <h4>Semester End Date</h4>
+                <input asp-for="Subject.SemesterEndDate" placeholder="End Date" type="date" tabindex="5" required>
+            </fieldset>
+            <fieldset>
+                <textarea asp-for="Subject.Description" placeholder="Discription" tabindex="6" required></textarea>
+            </fieldset>
+            <fieldset>
+                <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
+            </fieldset>
+
+        </form>
+        <div class="container-back-add-subject">
+            <button id="btn-back-add-subject">Back to Subjects</button>
+        </div>
+
+    </div>
+    <script>
+        document.getElementById('courseSelect').addEventListener('change', function () {
+            var selectedOption = this.options[this.selectedIndex];
+            var semNo = selectedOption.getAttribute('sem-max');
+            document.getElementById('semesterNumber').max = semNo;
+        });
+        document.getElementById('btn-back-add-subject').onclick = function () {
+            window.location.href = 'SubjectsView';
+        };
+
+    </script>
+
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <!-- Custom JS -->
+    <script src="~/js/dashboardscript.js"></script>
+</body>
+
+</html>

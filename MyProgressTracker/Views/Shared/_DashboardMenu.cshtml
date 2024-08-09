@@ -1,0 +1,31 @@
+﻿<!-- Sidebar -->
+<nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+    <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+            <li class="nav-item-dashboard">
+                <a class="nav-link" href="@Url.Action("DashboardView", "Dashboard")">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+            </li>
+            <li class="nav-item-studysessions">
+                <a class="nav-link" href="@Url.Action("StudySessionsView", "Dashboard")">
+                    <i class="fas fa-cogs"></i>
+                    Study Sessions
+                </a>
+            </li>
+            <li class="nav-item-courses">
+                <a class="nav-link" href="@Url.Action("CoursesView", "Dashboard")">
+                    <i class="fas fa-chart-line"></i>
+                    Courses
+                </a>
+            </li>
+            <li class="nav-item-subjects">
+                <a class="nav-link" href="@Url.Action("SubjectsView", "Dashboard")">
+                    <i class="fas fa-cogs"></i>
+                    Subjects
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
