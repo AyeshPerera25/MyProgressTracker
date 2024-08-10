@@ -17,6 +17,7 @@ namespace MyProgressTracker.ServiceConnectors
 		public AthenticationServiceConnector()
         {
             _httpClient = new HttpClient();
+            _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "ddd78940f70d4313851de1564789dd60");
         }
 
         public async Task<NewUserRegistrationRes> UserRegisterAsync(NewUserRegistrationReq request)

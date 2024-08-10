@@ -11,6 +11,7 @@ namespace MyProgressTracker.ServiceConnectors
 		public InquiryServiceConnector()
 		{
 			_httpClient = new HttpClient();
+			_httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "ddd78940f70d4313851de1564789dd60");
 		}
 		public async Task<ProgressReportRes> GetUserProgressReportAsync(ProgressReportReq request)
 		{
