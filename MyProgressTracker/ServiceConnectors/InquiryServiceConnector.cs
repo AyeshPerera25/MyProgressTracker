@@ -6,6 +6,7 @@ namespace MyProgressTracker.ServiceConnectors
 	public class InquiryServiceConnector
 	{
 		private readonly HttpClient _httpClient;
+		private string _baseUrl = "https://myprogresstrackerapigateway.azure-api.net/inquiry";
 
 		public InquiryServiceConnector()
 		{
@@ -15,7 +16,7 @@ namespace MyProgressTracker.ServiceConnectors
 		{
 			string jsonPayload = JsonConvert.SerializeObject(request);
 			Console.WriteLine(jsonPayload); // Print the JSON payload
-			var response = await _httpClient.PostAsJsonAsync("http://localhost:5011/api/DashboardInquiry/getProgressReport", request);
+			var response = await _httpClient.PostAsJsonAsync(_baseUrl+"/api/DashboardInquiry/getProgressReport", request);
 			if (response.IsSuccessStatusCode)
 			{
 				return await response.Content.ReadAsAsync<ProgressReportRes>();
@@ -31,7 +32,7 @@ namespace MyProgressTracker.ServiceConnectors
 		{
 			string jsonPayload = JsonConvert.SerializeObject(request);
 			Console.WriteLine(jsonPayload); // Print the JSON payload
-			var response = await _httpClient.PostAsJsonAsync("http://localhost:5011/api/DashboardInquiry/getAllCourses", request);
+			var response = await _httpClient.PostAsJsonAsync(_baseUrl + "/api/DashboardInquiry/getAllCourses", request);
 			if (response.IsSuccessStatusCode)
 			{
 				return await response.Content.ReadAsAsync<GetAllCoursesRes>();
@@ -48,7 +49,7 @@ namespace MyProgressTracker.ServiceConnectors
 		{
 			string jsonPayload = JsonConvert.SerializeObject(request);
 			Console.WriteLine(jsonPayload); // Print the JSON payload
-			var response = await _httpClient.PostAsJsonAsync("http://localhost:5011/api/DashboardInquiry/addNewCourse", request);
+			var response = await _httpClient.PostAsJsonAsync(_baseUrl + "/api/DashboardInquiry/addNewCourse", request);
 			if (response.IsSuccessStatusCode)
 			{
 				return await response.Content.ReadAsAsync<AddCourseRes>();
@@ -65,7 +66,7 @@ namespace MyProgressTracker.ServiceConnectors
 		{
 			string jsonPayload = JsonConvert.SerializeObject(request);
 			Console.WriteLine(jsonPayload); // Print the JSON payload
-			var response = await _httpClient.PostAsJsonAsync("http://localhost:5011/api/DashboardInquiry/getAllSubjects", request);
+			var response = await _httpClient.PostAsJsonAsync(_baseUrl + "/api/DashboardInquiry/getAllSubjects", request);
 			if (response.IsSuccessStatusCode)
 			{
 				return await response.Content.ReadAsAsync<GetAllSubjectsRes>();
@@ -82,7 +83,7 @@ namespace MyProgressTracker.ServiceConnectors
 		{
 			string jsonPayload = JsonConvert.SerializeObject(request);
 			Console.WriteLine(jsonPayload); // Print the JSON payload
-			var response = await _httpClient.PostAsJsonAsync("http://localhost:5011/api/DashboardInquiry/addNewSubject", request);
+			var response = await _httpClient.PostAsJsonAsync(_baseUrl + "/api/DashboardInquiry/addNewSubject", request);
 			if (response.IsSuccessStatusCode)
 			{
 				return await response.Content.ReadAsAsync<AddNewSubjectRes>();
@@ -99,7 +100,7 @@ namespace MyProgressTracker.ServiceConnectors
 		{
 			string jsonPayload = JsonConvert.SerializeObject(request);
 			Console.WriteLine(jsonPayload); // Print the JSON payload
-			var response = await _httpClient.PostAsJsonAsync("http://localhost:5011/api/DashboardInquiry/getAllStudySessions", request);
+			var response = await _httpClient.PostAsJsonAsync(_baseUrl + "/api/DashboardInquiry/getAllStudySessions", request);
 			if (response.IsSuccessStatusCode)
 			{
 				return await response.Content.ReadAsAsync<GetAllStudySessionsRes>();
@@ -116,7 +117,7 @@ namespace MyProgressTracker.ServiceConnectors
 		{
 			string jsonPayload = JsonConvert.SerializeObject(request);
 			Console.WriteLine(jsonPayload); // Print the JSON payload
-			var response = await _httpClient.PostAsJsonAsync("http://localhost:5011/api/DashboardInquiry/addNewStudySession", request);
+			var response = await _httpClient.PostAsJsonAsync(_baseUrl + "/api/DashboardInquiry/addNewStudySession", request);
 			if (response.IsSuccessStatusCode)
 			{
 				return await response.Content.ReadAsAsync<AddStudySessionRes>();

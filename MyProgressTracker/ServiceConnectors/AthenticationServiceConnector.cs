@@ -11,9 +11,10 @@ namespace MyProgressTracker.ServiceConnectors
     public class AthenticationServiceConnector 
     {
         private readonly HttpClient _httpClient;
-        
+		private string _baseUrl = "https://myprogresstrackerapigateway.azure-api.net/auth";
 
-        public AthenticationServiceConnector()
+
+		public AthenticationServiceConnector()
         {
             _httpClient = new HttpClient();
         }
@@ -22,7 +23,7 @@ namespace MyProgressTracker.ServiceConnectors
         {
 			string jsonPayload = JsonConvert.SerializeObject(request);
 			Console.WriteLine(jsonPayload); // Print the JSON payload
-			var response = await _httpClient.PostAsJsonAsync("http://localhost:5270/api/UserAuthentication/userRegister", request);
+			var response = await _httpClient.PostAsJsonAsync(_baseUrl+"/api/UserAuthentication/userRegister", request);
             if (response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadAsAsync<NewUserRegistrationRes>();
@@ -39,7 +40,7 @@ namespace MyProgressTracker.ServiceConnectors
         {
 			string jsonPayload = JsonConvert.SerializeObject(request);
 			Console.WriteLine(jsonPayload); // Print the JSON payload
-			var response = await _httpClient.PostAsJsonAsync("http://localhost:5270/api/UserAuthentication/userLogin", request);
+			var response = await _httpClient.PostAsJsonAsync(_baseUrl + "/api/UserAuthentication/userLogin", request);
             if (response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadAsAsync<UserLoginRes>();
