@@ -202,5 +202,53 @@ namespace MyProgressTracker.ServiceCore
             return response;
 
         }
+
+        internal CourseResponse DeleteCourse(int courseID, string? sessionKey, long userID)
+        {
+            CourseResponse courseResponse = null;
+            try
+            {
+                courseResponse = _courseHandler.deleteCourse(courseID,sessionKey, userID);
+            }
+            catch (Exception ex)
+            {
+                courseResponse = new CourseResponse();
+                courseResponse.IsRequestSuccess = false;
+                courseResponse.Description = ex.Message;
+            }
+            return courseResponse;
+        }
+
+        internal CourseResponse DeleteSubject(int subjectId, string? sessionKey, long userID)
+        {
+            CourseResponse courseResponse = null;
+            try
+            {
+                courseResponse = _courseHandler.deleteSubject(subjectId, sessionKey, userID);
+            }
+            catch (Exception ex)
+            {
+                courseResponse = new CourseResponse();
+                courseResponse.IsRequestSuccess = false;
+                courseResponse.Description = ex.Message;
+            }
+            return courseResponse;
+        }
+
+        internal CourseResponse DeleteStudySession(int sessionId, string? sessionKey, long userID)
+        {
+            CourseResponse courseResponse = null;
+            try
+            {
+                courseResponse = _courseHandler.deleteStudySession(sessionId, sessionKey, userID);
+            }
+            catch (Exception ex)
+            {
+                courseResponse = new CourseResponse();
+                courseResponse.IsRequestSuccess = false;
+                courseResponse.Description = ex.Message;
+            }
+            return courseResponse;
+        }
     }
 }

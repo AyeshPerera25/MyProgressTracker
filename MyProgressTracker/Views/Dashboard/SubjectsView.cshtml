@@ -62,7 +62,7 @@
                                         <td> @course.Description </td>
                                         <td>
                                             <button type="button" class="btn-tbl-edit" )">Edite</button>
-                                            <button type="button" class="btn-tbl-delete" )">Delete</button>
+                                            <button type="button" class="btn-tbl-delete" onclick="DeleteSubject('@course.SubjectId')" )">Delete</button>
                                         </td>
                                     </tr>
                                 }
@@ -100,6 +100,11 @@
         btnLogout.onclick = function () {
             window.location.href = 'Logout';
         };
+    }
+    function DeleteSubject(subjectId) {
+        if (confirm("Are you sure you want to delete this subject?")) {
+            window.location.href = '@Url.Action("DeleteSubject", "Dashboard")' + '?subjectId=' + subjectId;
+        }
     }
 </script>
 

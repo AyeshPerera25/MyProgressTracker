@@ -169,5 +169,86 @@ namespace MyProgressTracker.Handlers
                 throw new Exception("New Course Institute Name has not defined! ");
             }
         }
+
+        internal CourseResponse deleteCourse(int courseID, string? sessionKey, long userID)
+        {
+            CourseResponse response = new CourseResponse();
+            validateSessionData(sessionKey, userID);
+            DeleteCoursReq request = populateDeleteCourseReq(courseID,sessionKey, userID);
+            CommenResponse comResponse = _inquiryServiceConnector.DeleteCourseAsync(request).GetAwaiter().GetResult();
+            validateDeleteCommenResponse(comResponse);
+            
+            response.IsRequestSuccess = true;
+            response.Description = "Course Delete Successful!";
+            return response;
+        }
+
+        private void validateDeleteCommenResponse(CommenResponse response)
+        {
+            if (response != null)
+            {
+                if (!response.IsRequestSuccess)
+                {
+                    throw new Exception("Delete Req has failed due to: " + response.Description);
+                }
+            }
+            else
+            {
+                throw new Exception("Delete Res not found! ");
+            }
+        }
+
+        private DeleteCoursReq populateDeleteCourseReq(int courseID, string? sessionKey, long userID)
+        {
+            DeleteCoursReq request = new DeleteCoursReq();
+            request.CourseId = courseID;
+            request.SessionKey = sessionKey;    
+            request.UserId = userID;
+            return request;
+        }
+
+        public CourseResponse deleteSubject(int subjectId, string? sessionKey, long userID)
+        {
+            CourseResponse response = new CourseResponse();
+            validateSessionData(sessionKey, userID);
+            DeleteSubjectReq request = populateDeleteSubjectReq(subjectId, sessionKey, userID);
+            CommenResponse comResponse = _inquiryServiceConnector.DeleteSubjectAsync(request).GetAwaiter().GetResult();
+            validateDeleteCommenResponse(comResponse);
+
+            response.IsRequestSuccess = true;
+            response.Description = "Subject Delete Successful!";
+            return response;
+        }
+
+        private DeleteSubjectReq populateDeleteSubjectReq(int subjectId, string? sessionKey, long userID)
+        {
+            DeleteSubjectReq request = new DeleteSubjectReq();
+            request.SubjectId = subjectId;
+            request.SessionKey = sessionKey;
+            request.UserId = userID;
+            return request;
+        }
+
+        public CourseResponse deleteStudySession(int sessionId, string? sessionKey, long userID)
+        {
+            CourseResponse response = new CourseResponse();
+            validateSessionData(sessionKey, userID);
+            DeleteStudySessionReq request = populateDeleteStudySessionReq(sessionId, sessionKey, userID);
+            CommenResponse comResponse = _inquiryServiceConnector.DeleteStudySessionAsync(request).GetAwaiter().GetResult();
+            validateDeleteCommenResponse(comResponse);
+
+            response.IsRequestSuccess = true;
+            response.Description = "Study Session Delete Successful!";
+            return response;
+        }
+
+        private DeleteStudySessionReq populateDeleteStudySessionReq(int sessionId, string? sessionKey, long userID)
+        {
+            DeleteStudySessionReq request = new DeleteStudySessionReq();
+            request.StudySessionId = sessionId;
+            request.SessionKey = sessionKey;
+            request.UserId = userID;
+            return request; 
+        }
     }
 }

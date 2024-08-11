@@ -6,13 +6,13 @@ namespace MyProgressTracker.ServiceConnectors
 	public class InquiryServiceConnector
 	{
 		private readonly HttpClient _httpClient;
-		private string _baseUrl = "https://myprogresstrackerapigateway.azure-api.net/inquiry";
-		//private string _baseUrl = "http://localhost:5011";
+		//private string _baseUrl = "https://myprogresstrackerapigateway.azure-api.net/inquiry";
+		private string _baseUrl = "http://localhost:5011";
 
 		public InquiryServiceConnector()
 		{
 			_httpClient = new HttpClient();
-			_httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "ddd78940f70d4313851de1564789dd60");
+			//_httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "ddd78940f70d4313851de1564789dd60");
 		}
 		public async Task<ProgressReportRes> GetUserProgressReportAsync(ProgressReportReq request)
 		{
@@ -132,5 +132,55 @@ namespace MyProgressTracker.ServiceConnectors
 			return null;
 		}
 
-	}
+        public async Task<CommenResponse> DeleteCourseAsync(DeleteCoursReq request)
+        {
+            string jsonPayload = JsonConvert.SerializeObject(request);
+            Console.WriteLine(jsonPayload); // Print the JSON payload
+            var response = await _httpClient.PostAsJsonAsync(_baseUrl + "/api/DashboardInquiry/deleteCourse", request);
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsAsync<CommenResponse>();
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error: {response.StatusCode}, {errorContent}");
+            }
+            return null;
+        }
+
+		public async Task<CommenResponse> DeleteSubjectAsync(DeleteSubjectReq request)
+		{
+			string jsonPayload = JsonConvert.SerializeObject(request);
+			Console.WriteLine(jsonPayload); // Print the JSON payload
+			var response = await _httpClient.PostAsJsonAsync(_baseUrl + "/api/DashboardInquiry/deleteSubject", request);
+			if (response.IsSuccessStatusCode)
+			{
+				return await response.Content.ReadAsAsync<CommenResponse>();
+			}
+			else
+			{
+				var errorContent = await response.Content.ReadAsStringAsync();
+				Console.WriteLine($"Error: {response.StatusCode}, {errorContent}");
+			}
+			return null;
+		}
+
+        public async Task<CommenResponse> DeleteStudySessionAsync(DeleteStudySessionReq request)
+        {
+            string jsonPayload = JsonConvert.SerializeObject(request);
+            Console.WriteLine(jsonPayload); // Print the JSON payload
+            var response = await _httpClient.PostAsJsonAsync(_baseUrl + "/api/DashboardInquiry/deleteStudySession", request);
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsAsync<CommenResponse>();
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error: {response.StatusCode}, {errorContent}");
+            }
+            return null;
+        }
+    }
 }

@@ -294,6 +294,101 @@ namespace MyProgressTracker.Controllers
             TempData["message"] = response?.Description ?? "Unable to add course!";
             return RedirectToAction("AddSessionView");
         }
+        //======================================================================================================================>>>  Delete
+        public IActionResult DeleteCourse(int courseID)
+        {
+
+            string? sessionKey = HttpContext.Session.GetString(SystemConstant.SessionKey);
+            string? userID = HttpContext.Session.GetString(SystemConstant.UserID);
+            if (userID == null || userID == string.Empty)
+            {
+                userID = string.Concat(0L);
+            }
+
+            CourseResponse response = _systemServiceCore.DeleteCourse(courseID, sessionKey, long.Parse(userID));
+            if (response != null)
+            {
+                if (response.IsRequestSuccess)
+                {
+                    TempData["messageTyp"] = "S"; // Success
+                    return RedirectToAction("CoursesView");
+                }
+                else
+                {
+                    TempData["messageTyp"] = "E"; // Error
+                }
+                return RedirectToAction("CoursesView");
+            }
+            else
+            {
+                TempData["messageTyp"] = "E"; // Error
+            }
+            TempData["message"] = response?.Description ?? "Unable to delete course!";
+            return RedirectToAction("CoursesView");
+        }
+        public IActionResult DeleteSubject(int subjectId)
+        {
+
+            string? sessionKey = HttpContext.Session.GetString(SystemConstant.SessionKey);
+            string? userID = HttpContext.Session.GetString(SystemConstant.UserID);
+            if (userID == null || userID == string.Empty)
+            {
+                userID = string.Concat(0L);
+            }
+
+            CourseResponse response = _systemServiceCore.DeleteSubject(subjectId, sessionKey, long.Parse(userID));
+            if (response != null)
+            {
+                if (response.IsRequestSuccess)
+                {
+                    TempData["messageTyp"] = "S"; // Success
+                    return RedirectToAction("SubjectsView");
+                }
+                else
+                {
+                    TempData["messageTyp"] = "E"; // Error
+                }
+                return RedirectToAction("SubjectsView");
+            }
+            else
+            {
+                TempData["messageTyp"] = "E"; // Error
+            }
+            TempData["message"] = response?.Description ?? "Unable to delete subject!";
+            return RedirectToAction("SubjectsView");
+        }
+        public IActionResult DeleteSession(int sessionId)
+        {
+
+            string? sessionKey = HttpContext.Session.GetString(SystemConstant.SessionKey);
+            string? userID = HttpContext.Session.GetString(SystemConstant.UserID);
+            if (userID == null || userID == string.Empty)
+            {
+                userID = string.Concat(0L);
+            }
+
+            CourseResponse response = _systemServiceCore.DeleteStudySession(sessionId, sessionKey, long.Parse(userID));
+            if (response != null)
+            {
+                if (response.IsRequestSuccess)
+                {
+                    TempData["messageTyp"] = "S"; // Success
+                    return RedirectToAction("StudySessionsView");
+                }
+                else
+                {
+                    TempData["messageTyp"] = "E"; // Error
+                }
+                return RedirectToAction("StudySessionsView");
+            }
+            else
+            {
+                TempData["messageTyp"] = "E"; // Error
+            }
+            TempData["message"] = response?.Description ?? "Unable to delete study session!";
+            return RedirectToAction("StudySessionsView");
+        }
+
 
         public IActionResult Logout()
         {
