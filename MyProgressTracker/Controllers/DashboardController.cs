@@ -325,8 +325,8 @@ namespace MyProgressTracker.Controllers
                 }
 
             }
-            
-            return null;
+
+            return RedirectToAction("DashboardView");
         }
     }
 }
