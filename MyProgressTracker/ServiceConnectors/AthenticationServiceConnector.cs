@@ -11,14 +11,14 @@ namespace MyProgressTracker.ServiceConnectors
     public class AthenticationServiceConnector 
     {
         private readonly HttpClient _httpClient;
-		//private string _baseUrl = "https://myprogresstrackerapigateway.azure-api.net/auth";
-		private string _baseUrl = "http://localhost:5270";
+		private string _baseUrl = "https://myprogresstrackerapigateway.azure-api.net/auth";
+		//private string _baseUrl = "http://localhost:5270";
 
 
 		public AthenticationServiceConnector()
         {
             _httpClient = new HttpClient();
-            //_httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "ddd78940f70d4313851de1564789dd60");
+            _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "ddd78940f70d4313851de1564789dd60");
         }
 
         public async Task<NewUserRegistrationRes> UserRegisterAsync(NewUserRegistrationReq request)

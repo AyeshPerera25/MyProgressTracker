@@ -6,13 +6,13 @@ namespace MyProgressTracker.ServiceConnectors
 	public class InquiryServiceConnector
 	{
 		private readonly HttpClient _httpClient;
-		//private string _baseUrl = "https://myprogresstrackerapigateway.azure-api.net/inquiry";
-		private string _baseUrl = "http://localhost:5011";
+		private string _baseUrl = "https://myprogresstrackerapigateway.azure-api.net/inquiry";
+		//private string _baseUrl = "http://localhost:5011";
 
 		public InquiryServiceConnector()
 		{
 			_httpClient = new HttpClient();
-			//_httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "ddd78940f70d4313851de1564789dd60");
+			_httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "ddd78940f70d4313851de1564789dd60");
 		}
 		public async Task<ProgressReportRes> GetUserProgressReportAsync(ProgressReportReq request)
 		{
