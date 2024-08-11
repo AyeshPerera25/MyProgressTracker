@@ -69,5 +69,60 @@ namespace MyProgressTracker.Handlers
             loginResponse.Description  = userLoginResponse.Description;
             return loginResponse;
         }
+
+        internal LogoutResponse? UserLogout(string? sessionKey, long userID)
+        {
+            validateLogout(sessionKey,userID);
+            UserLogoutReq request = populateUserLogoutReq(sessionKey, userID);
+            UserLogoutRes userLogoutResponse = _authServiceConnector.UserLogoutAsync(request).GetAwaiter().GetResult();
+            validateUserLogoutResponse(userLogoutResponse);
+            LogoutResponse response = populateLogoutResponse(userLogoutResponse);
+            return response;
+        }
+
+        private LogoutResponse populateLogoutResponse(UserLogoutRes userLogoutResponse)
+        {
+            LogoutResponse logoutResponse = new LogoutResponse();
+            logoutResponse.IsRequestSuccess = userLogoutResponse.IsRequestSuccess;
+            logoutResponse.Description = userLogoutResponse.Description;
+            return logoutResponse;
+        }
+
+        private void validateUserLogoutResponse(UserLogoutRes response)
+        {
+            if (response != null)
+            {
+                if (!response.IsRequestSuccess)
+                {
+                    throw new Exception("User Logout Req has failed due to: " + response.Description);
+                }
+            }
+            else
+            {
+                throw new Exception("User Logout Res not found! ");
+            }
+        }
+
+        private UserLogoutReq populateUserLogoutReq(string? sessionKey, long userID)
+        {
+            UserLogoutReq request = new UserLogoutReq();
+            request.UserId = userID;    
+            request.SessionKey = sessionKey;
+            return request;
+        }
+
+        private void validateLogout(string? sessionKey, long userID)
+        {
+            if (sessionKey == null || sessionKey == string.Empty)
+            {
+               
+                throw new Exception("User Login Session Key not found!");
+                
+            }
+            if(userID <= 0L)
+            {
+                throw new Exception("User Id not found! ");
+            }
+        }
     }
 }

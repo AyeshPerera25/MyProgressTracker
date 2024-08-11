@@ -11,13 +11,14 @@ namespace MyProgressTracker.ServiceConnectors
     public class AthenticationServiceConnector 
     {
         private readonly HttpClient _httpClient;
-		private string _baseUrl = "https://myprogresstrackerapigateway.azure-api.net/auth";
+		//private string _baseUrl = "https://myprogresstrackerapigateway.azure-api.net/auth";
+		private string _baseUrl = "http://localhost:5270";
 
 
 		public AthenticationServiceConnector()
         {
             _httpClient = new HttpClient();
-            _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "ddd78940f70d4313851de1564789dd60");
+            //_httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "ddd78940f70d4313851de1564789dd60");
         }
 
         public async Task<NewUserRegistrationRes> UserRegisterAsync(NewUserRegistrationReq request)
@@ -52,6 +53,23 @@ namespace MyProgressTracker.ServiceConnectors
 				Console.WriteLine($"Error: {response.StatusCode}, {errorContent}");
 			}
 			return null;
+        }
+
+        public async Task<UserLogoutRes> UserLogoutAsync(UserLogoutReq request)
+        {
+            string jsonPayload = JsonConvert.SerializeObject(request);
+            Console.WriteLine(jsonPayload); // Print the JSON payload
+            var response = await _httpClient.PostAsJsonAsync(_baseUrl + "/api/UserAuthentication/userLogout", request);
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsAsync<UserLogoutRes>();
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error: {response.StatusCode}, {errorContent}");
+            }
+            return null;
         }
     }
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyProgressTracker.Models;
 using MyProgressTracker.ServiceCore;
+using NuGet.Protocol.Plugins;
 
 namespace MyProgressTracker.Controllers
 {
@@ -294,6 +295,38 @@ namespace MyProgressTracker.Controllers
             return RedirectToAction("AddSessionView");
         }
 
+        public IActionResult Logout()
+        {
+            string? sessionKey = HttpContext.Session.GetString(SystemConstant.SessionKey);
+            string? userID = HttpContext.Session.GetString(SystemConstant.UserID);
+            if (userID == null || userID == string.Empty)
+            {
+                userID = string.Concat(0L);
+            }
 
+            LogoutResponse response = _systemServiceCore.processLogout(sessionKey, long.Parse(userID));
+            if (response != null)
+            {
+
+                TempData["message"] = response?.Description ?? "Unable to load courses";
+
+
+                if (response.IsRequestSuccess)
+                {
+                    TempData["messageTyp"] = "S"; // Success
+                    HttpContext.Session.SetString(SystemConstant.SessionKey,"");
+                    HttpContext.Session.SetString(SystemConstant.UserName,"");
+                    HttpContext.Session.SetString(SystemConstant.UserID, "");
+                    return RedirectToAction("UserLogin", "Login");
+                }
+                else
+                {
+                    TempData["messageTyp"] = "E"; // Error
+                }
+
+            }
+            
+            return null;
+        }
     }
 }

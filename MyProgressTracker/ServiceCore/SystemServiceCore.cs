@@ -185,5 +185,22 @@ namespace MyProgressTracker.ServiceCore
             }
             return studySessionResponse;
         }
+
+        internal LogoutResponse processLogout(string? sessionKey, long userID)
+        {
+            LogoutResponse? response = null;
+            try
+            {
+                response = _loginHandler.UserLogout(sessionKey, userID);
+            }
+            catch (Exception ex)
+            {
+                response = new LogoutResponse();
+                response.IsRequestSuccess = false;
+                response.Description = ex.Message;
+            }
+            return response;
+
+        }
     }
 }

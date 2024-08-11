@@ -26,6 +26,7 @@
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2-Dashboard">Study Sessions</h1>
                     <a href="#" class="logo">MY <b class="b1">Progress </b><b class="b2"> Tracker</b></a>
+                    <button class="btn-logout" id="btn-logout">Logout</button>
                 </div>
                 <div class="row-tabl">
                     <div class="tbl-btn-container">
@@ -83,13 +84,19 @@
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <!-- Custom JS -->
-    <script src="~/js/dashboardscript.js"></script>
+    <script src="~/js/dashboardscript2.js"></script>
 </body>
 <script>
     var tblAddSession = document.getElementById('btn-tbl-session-add');
     if (tblAddSession != null) {
         tblAddSession.onclick = function () {
             window.location.href = 'AddSessionView';
+        };
+    }
+    var btnLogout = document.getElementById('btn-logout')
+    if (btnLogout != null) {
+        btnLogout.onclick = function () {
+            window.location.href = 'Logout';
         };
     }
 </script>

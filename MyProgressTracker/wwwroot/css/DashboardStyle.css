@@ -196,3 +196,18 @@ body {
     .btn-tbl-delete:active {
         background-color: #b6ff00;
     }
+
+.btn-logout {
+    border: 0;
+    border-radius: 20px;
+    padding: 12px 30px;
+    cursor: pointer;
+    color: #FFF;
+    background-color: #FF4B2B;
+}
+    .btn-logout:hover {
+        background-color: #373C3F;
+    }
+    .btn-logout:active {
+        background-color: #b6ff00;
+    }
